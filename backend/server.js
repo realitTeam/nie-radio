@@ -32,6 +32,13 @@ app.use('/api/moderator', moderatorRoutes);
 //   res.send("Hello Then");
 // });
 
+// Serve the React app
+app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+});
+
 app.all('*', (req, res) => {
     res.status(404);
     if (req.accepts('html')) {
