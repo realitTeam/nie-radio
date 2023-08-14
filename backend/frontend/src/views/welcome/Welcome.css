@@ -1,0 +1,66 @@
+/* Hero section container */
+@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
+
+.radio-player{
+  margin-top: -300px;
+}
+.hero-section {
+  background: url("hero-nie.png") no-repeat center center;
+  background-size: cover;
+  padding: 100px 0;
+  height: 710px;
+}
+
+/* Hero content on the left */
+.hero-content {
+  padding: 20px;
+  color: #fff;
+}
+
+.hero-content .welcome {
+  font-family: luckiest guy;
+  color: #fff;
+  font-size: 80px;
+}
+
+.hero-content .to {
+    font-family: luckiest guy;
+    color: #ffd699;
+    font-size: 50px;
+  }
+
+.hero-content .nie-radio {
+  font-family: luckiest guy;
+  color: #c9b0ea;
+  font-size: 80px;
+}
+/* Button style */
+.btn-readmore {
+  color: #835886;
+  font-weight: 700;
+  font-size: large;
+  background-color: #c9b0ea;
+  border-radius: 30px;
+  border: 1px solid #c9b0ea;
+  padding: 5px 15px;
+}
+.btn-readmore:hover {
+  color: #f8faf9;
+  background-color: #835886;
+  border-radius: 30px;
+  border: 1px solid #835886;
+  padding: 5px 15px;
+}
+
+/* Image on the right */
+.hero-image {
+  padding: 20px;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .hero-content,
+  .hero-image {
+    padding: 10px;
+  }
+}
