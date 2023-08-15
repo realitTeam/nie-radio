@@ -1,8 +1,9 @@
 /* Hero section container */
 @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
 
-.radio-player{
-  margin-top: -300px;
+.radio-box{
+  margin-top: -138px;
+  margin-left: 120px;
 }
 .hero-section {
   background: url("hero-nie.png") no-repeat center center;

@@ -1,3 +1,4 @@
+// authController.js
 require("dotenv").config();
 
 const { body, validationResult } = require("express-validator");
@@ -84,7 +85,7 @@ const moderatorRegister = asyncHandler(async (req, res) => {
 
   if (moderator) {
     res.status(201).json({
-      message: `You are successfully registered & waiting for Admin aproval./nUse ${organization_email} as your username.`,
+      message: `You are successfully registered & waiting for Admin approval.\nUse ${organization_email} as your username.`,
     });
   } else {
     res.status(400).json({ message: `Error occurred` });
@@ -133,7 +134,7 @@ const studentRegister = asyncHandler(async (req, res) => {
   }
   // hashing pw
   const hashedPW = await bcrypt.hash(password, 10);
-  const student_status = "inactive";
+  const student_status = "active";
   const studentObject = {
     refferal_code,
     student_name,
@@ -158,8 +159,19 @@ const studentRegister = asyncHandler(async (req, res) => {
   const student = await Student.create(studentObject);
   // craeting and storing into login
   const stuLogin = await Login.create(studentLoginObject);
+
+  // generate token
+  const accessToken = jwt.sign(
+    { username: student.username },
+    process.env.SECRET_KEY,
+    { expiresIn: "1h" }
+  );
+
+  // Store JWT in local storage
+  // localStorage.setItem("token", accessToken);
+
   if (student) {
-    res.status(201).json({ message: `You are successfully registered` });
+    res.status(201).json({ accessToken, role: role, message: `You are successfully registered` });
   } else {
     res.status(400).json({ message: `Error occurred` });
   }
@@ -177,7 +189,7 @@ const userLogin = asyncHandler(async (req, res) => {
 
   // validating inputs
   if (!username || !password) {
-    return res.json({ message: "All fields are required." });
+    return res.status(400).json({ message: "All fields are required." });
   }
   // checking existing user
   const user = await Login.findOne({ username });
@@ -186,29 +198,36 @@ const userLogin = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "User not found" });
   }
 
-  // if user found comparing the pws
-  var pwIsValid = await bcrypt.compareSync(password, user.password);
+  // If user found, check the user status whether active or inactive
+  if (user.status === "active") {
+    // if user found comparing the pws
+    var pwIsValid = await bcrypt.compareSync(password, user.password);
 
-  // if pws are not matched
-  if (!pwIsValid) {
-    return res.status(401).send({
-      accessToken: null,
-      message: "Invalid Password!",
-    });
+    // if pws are not matched
+    if (!pwIsValid) {
+      return res.status(401).send({
+        accessToken: null,
+        message: "Invalid Password!",
+      });
+    }
+
+    // generate token
+    const accessToken = jwt.sign(
+      { username: user.username },
+      process.env.SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+
+    // Store JWT in local storage
+    // localStorage.setItem("token", accessToken);
+
+    // return token
+    res.json({ accessToken, role: user.role });
+  } else if (user.status === "inactive") {
+    // User is inactive, handle the inactive user scenario
+    return res.status(403).json({ message: "User is not authorized." });
   }
 
-  // generate token
-  const accessToken = jwt.sign(
-    { username: user.username },
-    process.env.SECRET_KEY,
-    { expiresIn: "1h" }
-  );
-
-  // Store JWT in local storage
-  // localStorage.setItem("token", accessToken);
-
-  // return token
-  res.json({ accessToken, role: user.role });
 });
 
 // #####################################################################################################

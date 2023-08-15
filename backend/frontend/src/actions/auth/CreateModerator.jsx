@@ -1,12 +1,11 @@
-import axios from 'axios'
+// createModerator.jsx
+import axios from "axios";
 
-// creating new client
 export const createModerator = async (formData) => {
-    try {
-        const response = await axios.post('http://localhost:8000/api/m', formData);
-        console.log(response.data);
-    } catch (error) {
-        console.error(error);
-    }
-}
-
+  try {
+    const response = await axios.post("http://localhost:80/api/m", formData);
+    return response.data; //Return the response data
+  } catch (error) {
+    throw error; //Rethrow the error
+  }
+};

@@ -1,3 +1,4 @@
+// Login.jsx
 import { useState } from "react";
 import { login } from '../../actions/auth/LoginUser'
 
@@ -7,9 +8,29 @@ export default function Login() {
     // Function to handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        login(formData);
-        console.log(formData);
-    }
+        try {
+            const response = await login(formData);
+            console.log(response)
+            if (response) {
+                if (response.role === 'admin') {
+                    window.location.href = '/admin';
+                } else if (response.role === 'moderator') {
+                    window.location.href = '/moderator';
+                } else if (response.role === 'student') {
+                    window.location.href = '/student';
+                } else {
+                    alert(response.message);
+                }
+            }
+        } catch (error) {
+            if (error.response && error.response.data) {
+                alert(error.response.data.message); // Show the error message from the server
+            } else {
+                alert("An error occurred. Please try again later.");
+            }
+        }
+    };
+    
 
     const handleChange = (e) => {
         setFormData({

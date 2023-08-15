@@ -1,3 +1,4 @@
+// Register.jsx
 import { useState } from "react";
 import "../../assets/css/auth/Register.css";
 import { createStudent } from '../../actions/auth/CreateStudent'
@@ -8,8 +9,20 @@ export default function Register() {
     // Function to handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        createStudent(formData);
-    }
+        try {
+            const response = await createStudent(formData);
+            if (response && response.message) {
+                alert(response.message); // Set the message received from the server
+                window.location.href = '/student';
+            }
+        } catch (error) {
+            if (error.response && error.response.data) {
+                alert(error.response.data.message); // Set the error message from the server
+            } else {
+                alert("An error occurred. Please try again later.");
+            }
+        }
+    };
 
     const handleChange = (e) => {
         setFormData({

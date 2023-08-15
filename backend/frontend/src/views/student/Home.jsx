@@ -1,7 +1,6 @@
 
 import ReactPlayer from 'react-player';
 
-// import { Listen } from '../../actions/listen/Listen';
 import Header from "../../components/student/layouts/Header";
 import SideBar from "../../components/student/layouts/SideBar";
 import Footer from "../../components/student/layouts/Footer";

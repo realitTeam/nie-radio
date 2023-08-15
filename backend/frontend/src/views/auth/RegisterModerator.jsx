@@ -1,3 +1,4 @@
+// RegisterModerator.jsx
 import { useState } from "react";
 import axios from "axios";
 import "../../assets/css/auth/Register.css";
@@ -15,11 +16,24 @@ export default function RegisterModerator() {
   };
 
   // Function to handle form submission
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    createModerator(formData);
+    try {
+      const response = await createModerator(formData);
+      if (response && response.message) {
+        alert(response.message); // Show the success message in an alert
+        window.location.href = "/";
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.message); // Show the error message in an alert
+      } else {
+        alert("An error occurred. Please try again later.");
+      }
+    }
   };
-
+  
   const handleChange = (e) => {
     const { id, value } = e.target;
     if (id === "district") {

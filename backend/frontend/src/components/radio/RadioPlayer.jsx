@@ -27,8 +27,8 @@ const RadioPlayer = () => {
           <img src="../../../public/album_arts/alar1.jpg" alt="Album Art" />
         </div>
         <div className="audio-info">
-          <div className="audio-title">Song Title</div>
-          <div className="audio-description">Artist Name</div>
+          <div className="audio-title">Streaming Title</div>
+          {/* <div className="audio-description">Artist Name</div> */}
           <div className=""> {/* audio-container */}
             <audio
               src={audioUrl}

@@ -4,26 +4,12 @@ import Footer from "../../components/welcome/layouts/Footer";
 
 import "./Welcome.css";
 import radioImg from "./radio-nie.png"
+import RadioBox from "../../components/Radio/RadioBox";
 
 const Welcome = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
-  const audioUrl = "http://143.244.134.209:8000/stream";
-
-  const togglePlay = () => {
-    setIsPlaying((prevIsPlaying) => !prevIsPlaying);
-  };
-
-  const stopStream = () => {
-    setIsPlaying(false);
-  };
-
-  const handleVolumeChange = (event) => {
-    const newVolume = parseFloat(event.target.value);
-    setVolume(newVolume);
-  };
   return (
     <>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <Header />
       <div className="hero-section">
         <div className="container mt-5">
@@ -40,14 +26,10 @@ const Welcome = () => {
               <div className="hero-image mt-2">
                 {/* Replace 'image-url.jpg' with the actual path to your image */}
                 <img src={radioImg} alt="Hero" />
-                <audio
-                  src={audioUrl}
-                  controls
-                  autoPlay={isPlaying}
-                  volume={volume}
-                  className="radio-player"
-                />
-
+                
+              </div>
+              <div className="radio-box">
+                <RadioBox/>
               </div>
             </div>
           </div>

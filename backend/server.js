@@ -14,7 +14,7 @@ const listenRoutes = require('./routes/listen/listenRoutes');
 // middleware /////////////////////////////////////////////////////////////////////////////
 const authMiddleware = require('./middleware/auth/authMiddleware');
 // /////////////////////////////////////////////////////////////////////////////
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 80;
 
 const app = express();
 connectDB();
@@ -31,13 +31,6 @@ app.use('/api/moderator', moderatorRoutes);
 // app.use("/api", (req, res, next) => {
 //   res.send("Hello Then");
 // });
-
-// Serve the React app
-app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
-});
 
 app.all('*', (req, res) => {
     res.status(404);

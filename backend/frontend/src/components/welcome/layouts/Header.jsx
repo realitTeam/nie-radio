@@ -53,6 +53,9 @@ const Header = () => {
                 </a>
               </li>
               <li className="nav-item">
+                |
+              </li>
+              <li className="nav-item">
                 <a className="nav-link mx-2" href="/login">
                   Sign In
                 </a>

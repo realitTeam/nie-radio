@@ -3,8 +3,8 @@ import "./Footer.css";
 const Footer = () => {
     return (
         <>
-            <footer class="text-center text-lg-start bg-light text-muted">
-                <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <footer class="text-center bg-pi-li text-lg-start text-muted">
+                <section class="bg-pi-dk d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
                     <div class="me-5 d-none d-lg-block">
                         <span></span>
                     </div>
@@ -113,7 +113,7 @@ const Footer = () => {
                 </section>
                 <div class="text-center p-4">
                     Copyright © 2023 - National Institute of Education - 
-                    <a class="text-reset fw-bold" href="">
+                    <a class="text-reset fw-bold" href="https://realit.lk">
                          Concept, Design & Developed By Real IT PVT LTD
                     </a>
                 </div>
