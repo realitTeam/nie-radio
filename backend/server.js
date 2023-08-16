@@ -21,7 +21,15 @@ connectDB();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
+
+// Set up CORS options
+const corsOptions = {
+    origin: 'http://nieappworld.com', // Allow requests only from this domain
+    methods: 'GET, POST, PUT, DELETE', // Specify the allowed HTTP methods
+    optionsSuccessStatus: 200, // Set the status code for successful preflight requests
+  };
+  
+app.use(cors(corsOptions));
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.use('/api', authRoutes); //login + register
