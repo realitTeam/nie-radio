@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const login = async (formData) => {
     try {
-        const response = await axios.post('http://localhost:80/api/login', formData);
+        const response = await axios.post('http://localhost:8000/api/login', formData);
 
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('role', response.data.role);
