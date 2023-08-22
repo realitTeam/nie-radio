@@ -4,7 +4,7 @@ import Header from "../../components/admin/layouts/Header";
 import SideBar from "../../components/admin/layouts/SideBar";
 import Footer from "../../components/admin/layouts/Footer";
 
-import './App.css';
+import './admin.css';
 import './home.css';
 import RadioPlayer from '../../components/radio/RadioPlayer';
 

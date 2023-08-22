@@ -12,6 +12,8 @@ import RegisterModerator from "./views/auth/RegisterModerator";
 import AllModerators from "./views/admin/moderators/AllModerators";
 import AllRecordings from "./views/admin/recordings/AllRecordings";
 import AllStudentRecordings from "./views/student/AllRecordings";
+import AllStudents from "./views/admin/students/AllStudents";
+import NewModerator from "./views/admin/moderators/NewModerator";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           {/* admin routes */}
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/moderators" element={<AllModerators />} />
+          <Route path="/admin/moderators/new" element={<NewModerator />} />
+          <Route path="/admin/students" element={<AllStudents />} />
           <Route path="/admin/recordings" element={<AllRecordings />} />
         </Routes>
       </Router>

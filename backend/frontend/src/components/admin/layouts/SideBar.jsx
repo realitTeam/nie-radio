@@ -20,9 +20,28 @@ export default function SideBar() {
                     </li>
                     <li className="nav-heading">Moderators</li>
                     <li className="nav-item">
+                        <a className="nav-link" href="/admin/moderators/new">
+                        <i className="bi bi-person-fill-add"></i>
+                            <span>New Moderator</span>
+                        </a>
+                    </li>
+                    <li className="nav-item">
                         <a className="nav-link" href="/admin/moderators">
                         <i className="bi bi-people-fill"></i>
                             <span>Moderators</span>
+                        </a>
+                    </li>
+                    <li className="nav-heading">Students</li>
+                    {/* <li className="nav-item">
+                        <a className="nav-link" href="/admin/students">
+                        <i className="bi bi-person-fill-add"></i>
+                            <span>New Student</span>
+                        </a>
+                    </li> */}
+                    <li className="nav-item">
+                        <a className="nav-link" href="/admin/students">
+                        <i className="bi bi-people-fill"></i>
+                            <span>Students</span>
                         </a>
                     </li>
                 </ul>
