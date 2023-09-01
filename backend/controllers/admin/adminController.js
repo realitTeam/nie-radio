@@ -197,7 +197,6 @@ const aStoreRecording = asyncHandler(async (req, res) => {
     return res.json({ message: "Fill all required fields." });
   }
   const duplicate_recording = await Recording.findOne({ session_link }).lean().exec();
-  console.log(duplicate_recording);
   if (duplicate_recording) {
     return res
       .status(409)
