@@ -1,7 +1,6 @@
 // AllModerators.jsx
 import React, { useState, useEffect } from "react";
-import { viewModerators, changeModeratorStatus } from "../../../actions/admin/Moderators";
-
+import axios from 'axios'
 import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
@@ -10,7 +9,8 @@ function ModeratorModal({ selectedModerator, onClose }) {
   const toggleModeratorStatus = async () => {
     try {
       // Call an API to toggle the status
-      await changeModeratorStatus(selectedModerator._id);
+      const moderator_email = selectedModerator.organization_email;
+      await axios.put(`/api/admin/moderators/status/${moderator_email}`);
       // Update the moderator status in the selectedModerator object
       selectedModerator.moderator_status = selectedModerator.moderator_status === "active" ? "inactive" : "active";
       // Close the modal after toggling
@@ -97,8 +97,8 @@ export default function AllModerators() {
 
   useEffect(() => {
     async function fetchModerators() {
-      const moderatorsData = await viewModerators();
-      setModerators(moderatorsData);
+      const moderatorsData = await axios.get('/api/admin/moderators');
+      setModerators(moderatorsData.data);
     }
     fetchModerators();
   }, []);
@@ -122,7 +122,7 @@ export default function AllModerators() {
         <section className="section">
           <div className="row">
             <div className="col-lg-12">
-              <div className="card mb-3">
+              <div className="card mb-3 crd_bg_lgt">
                 <div className="card-body">
                   <table className="table pt-4">
                     <thead>

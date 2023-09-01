@@ -22,7 +22,7 @@ export default function AllRecordings() {
                 <section className="section">
                     <div className="row">
                         <div className="col-lg-12">
-                            <div className="card mb-3">
+                            <div className="card crd_bg_lgt mb-3">
                                 <div className="card-body">
                                     <div className="pt-4 pb-2">
                                         <h5 className="card-title text-start pb-0 fs-4">

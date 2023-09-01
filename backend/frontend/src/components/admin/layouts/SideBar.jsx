@@ -13,6 +13,12 @@ export default function SideBar() {
                     </li>
                     <li className="nav-heading">Recordings</li>
                     <li className="nav-item">
+                        <a className="nav-link" href="/admin/recordings/new">
+                        <i className="bi bi-cassette-fill"></i>
+                            <span>New Session</span>
+                        </a>
+                    </li>
+                    <li className="nav-item">
                         <a className="nav-link" href="/admin/recordings">
                         <i className="bi bi-cassette-fill"></i>
                             <span>Recordings</span>
@@ -32,12 +38,12 @@ export default function SideBar() {
                         </a>
                     </li>
                     <li className="nav-heading">Students</li>
-                    {/* <li className="nav-item">
-                        <a className="nav-link" href="/admin/students">
+                    <li className="nav-item">
+                        <a className="nav-link" href="/admin/students/new">
                         <i className="bi bi-person-fill-add"></i>
                             <span>New Student</span>
                         </a>
-                    </li> */}
+                    </li>
                     <li className="nav-item">
                         <a className="nav-link" href="/admin/students">
                         <i className="bi bi-people-fill"></i>

@@ -1,7 +1,6 @@
 // AllStudents.jsx
 import React, { useState, useEffect } from "react";
-import { viewStudents, changeStudentStatus } from "../../../actions/admin/Student";
-
+import axios from 'axios'
 import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
@@ -9,9 +8,9 @@ import Footer from "../../../components/admin/layouts/Footer";
 function StudentModal({ selectedStudent, onClose }) {
   const toggleStudentStatus = async () => {
     try {
-      // Call an API to toggle the status
-      await changeStudentStatus(selectedStudent._id);
-      // Update the Student status in the selectedStudent object
+      const student_email = selectedStudent.student_email;
+      await axios.put(`/api/admin/students/status/${student_email}`);
+      // Update the moderator status in the selectedStudent object
       selectedStudent.student_status = selectedStudent.student_status === "active" ? "inactive" : "active";
       // Close the modal after toggling
       onClose();
@@ -79,8 +78,8 @@ export default function AllStudents() {
 
   useEffect(() => {
     async function fetchStudents() {
-      const studentsData = await viewStudents();
-      setStudents(studentsData);
+      const studentsData = await axios.get('/api/admin/students');
+      setStudents(studentsData.data);
     }
     fetchStudents();
   }, []);
@@ -107,12 +106,9 @@ export default function AllStudents() {
         <section className="section">
           <div className="row">
             <div className="col-lg-12">
-              <div className="card mb-3">
+              <div className="card mb-3 crd_bg_lgt">
                 <div className="card-body">
                   <div className="pt-2 pb-2">
-                    <h5 className="card-title text-start pb-0 fs-4">
-                      All Students
-                    </h5>
                   </div>
 
                   <table className="table ">

@@ -1,7 +1,6 @@
 // NewModerator.jsx
 import React, { useState, useEffect } from "react";
-import { storeModerator } from "../../../actions/admin/Moderators";
-
+import axios from 'axios'
 import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
@@ -22,7 +21,7 @@ export default function NewModerator() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await storeModerator(formData);
+            const response = await axios.post("/api/admin/moderators/store", formData);
             if (response && response.message) {
                 alert(response.message); // Show the success message in an alert
                 window.location.reload();
@@ -73,7 +72,7 @@ export default function NewModerator() {
                 <section className="section">
                     <div className="row">
                         <div className="col-lg-12">
-                            <div className="card mb-3">
+                            <div className="card mb-3 crd_bg_lgt">
                                 <div className="card-body">
                                     <form
                                         onSubmit={handleFormSubmit}

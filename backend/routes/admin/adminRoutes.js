@@ -3,11 +3,17 @@ const express = require('express');
 const router = express.Router();
 const asyncHandler = require('express-async-handler');
 const adminController = require('../../controllers/admin/adminController');
+const recordingController = require('../../controllers/recordings/recordingController');
 
-router.get('/moderators', asyncHandler(adminController.viewModerators))
-router.get('/students', asyncHandler(adminController.viewStudents))
-router.put('/moderators/{_id}/status', asyncHandler(adminController.changeModeratorStatus))
-router.put('/students/{_id}/status', asyncHandler(adminController.changeStudentStatus))
-router.post('/moderators/store', asyncHandler(adminController.storeRegister))
+router.get('/moderators', asyncHandler(adminController.aViewModerators))
+router.get('/students', asyncHandler(adminController.aViewStudents))
+router.put('/moderators/status/:_email', asyncHandler(adminController.aChangeModeratorStatus));
+router.put('/students/status/:_email', asyncHandler(adminController.aChangeStudentStatus))
+router.post('/moderators/store', asyncHandler(adminController.aStoreModerator))
+router.post('/students/store', asyncHandler(adminController.aStoreStudent))
+router.get('/recordings', asyncHandler(recordingController.rAllRecordings))
+router.post('/recordings/store', asyncHandler(adminController.aStoreRecording))
+router.get('/tickets', asyncHandler(adminController.aListTickets))
+router.post('/tickets/reply', asyncHandler(adminController.aTicketReply))
 
 module.exports = router;

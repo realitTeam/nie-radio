@@ -1,36 +1,41 @@
 // Login.jsx
+import axios from "axios";
 import { useState } from "react";
-import { login } from '../../actions/auth/LoginUser'
+import { Navigate } from "react-router-dom";
 
-export default function Login() {
+const Login = ({ onLogin }) => {
     const [formData, setFormData] = useState({});
 
     // Function to handle form submission
-    const handleFormSubmit = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await login(formData);
-            console.log(response)
-            if (response) {
-                if (response.role === 'admin') {
-                    window.location.href = '/admin';
-                } else if (response.role === 'moderator') {
-                    window.location.href = '/moderator';
-                } else if (response.role === 'student') {
-                    window.location.href = '/student';
-                } else {
-                    alert(response.message);
+            const response = await axios.post("/api/login", formData);
+            const token = response.data.token;
+            const role = response.data.role; // Get the role from the response
+
+            localStorage.setItem("token", token);
+
+            onLogin(token);
+
+            // Redirect to the relevant dashboard based on user role
+            if (token) {
+                if (role === "admin") {
+                    // Redirect to admin dashboard
+                    window.location.href = "/admin"; // Redirect using window.location
+                } else if (role === "moderator") {
+                    // Redirect to moderator dashboard
+                    window.location.href = "/moderator"; // Redirect using window.location
+                } else if (role === "student") {
+                    // Redirect to student dashboard
+                    window.location.href = "/student"; // Redirect using window.location
                 }
             }
+
         } catch (error) {
-            if (error.response && error.response.data) {
-                alert(error.response.data.message); // Show the error message from the server
-            } else {
-                alert("An error occurred. Please try again later.");
-            }
+            console.error("Login failed");
         }
     };
-    
 
     const handleChange = (e) => {
         setFormData({
@@ -47,23 +52,20 @@ export default function Login() {
                             <div className="row justify-content-center">
                                 <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                                     <div className="d-flex justify-content-center py-4">
-                                        <a
-                                            href="/"
-                                            className="logo d-flex align-items-center w-auto"
-                                        >
+                                        <a href="/" className="logo d-flex align-items-center w-auto">
                                             <img src="assets/img/logo.png" alt="" />
-                                            <span className="d-none d-lg-block">NIE Radio</span>
+                                            <span className="d-none d-lg-block">NIE RADIO</span>
                                         </a>
                                     </div>
-                                    <div className="card mb-3">
+                                    <div className="card lgn_crd_bg_lgt">
                                         <div className="card-body">
-                                            <div className="pt-4 pb-2">
+                                            <div className="pt-2">
                                                 <h5 className="card-title text-start pb-0 fs-4">
                                                     Login
                                                 </h5>
                                             </div>
-
-                                            <form onSubmit={handleFormSubmit} method="POST" className="row g-3 needs-validation">
+                                            <hr />
+                                            <form onSubmit={handleLogin} method="POST" className="row g-3 needs-validation">
 
                                                 <div className="col-12">
                                                     <label htmlFor="username" className="form-label">Username</label>
@@ -81,12 +83,6 @@ export default function Login() {
                                                 </div>
 
                                                 <div className="col-12">
-                                                    <div className="form-check">
-                                                        <input className="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe" />
-                                                        <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
-                                                    </div>
-                                                </div>
-                                                <div className="col-12">
                                                     <button className="btn btn-primary w-100" type="submit">Login</button>
                                                 </div>
                                                 <div className="col-12">
@@ -103,4 +99,6 @@ export default function Login() {
             </main>
         </>
     )
-}
+};
+
+export default Login;

@@ -11,6 +11,13 @@ export default function SideBar() {
                             <span>Home</span>
                         </a>
                     </li>
+                    <li className="nav-heading">Recordings</li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="#">
+                        <i className="bi bi-cassette-fill"></i>
+                            <span>Recordings</span>
+                        </a>
+                    </li>
                     <li className="nav-heading">Student Management</li>
                     <li className="nav-item">
                         <a className="nav-link" href="/moderator/students/new">

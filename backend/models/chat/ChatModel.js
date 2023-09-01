@@ -2,15 +2,27 @@ const mongoose = require('mongoose');
 
 const ChatSchema = new mongoose.Schema(
     {
-        student_id: {
+        user_name: {
             type: String,
             required: true
         },
-        student_name: {
+        user_email: {
+            type: String,
+            required: false
+        },
+        user_school: {
+            type: String,
+            required: false
+        },
+        ticket_content: {
             type: String,
             required: true
         },
-        student_msg: {
+        ticket_reply: {
+            type: String,
+            required: false
+        },
+        ticket_status: {
             type: String,
             required: true
         }

@@ -1,24 +1,29 @@
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
+// authMiddleware.js
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const authPermission = (req, res, next) => {
-  const token = localStorage.getItem("token");
+const authMiddleware = (requiredRole) => {
+  return (req, res, next) => {
+    const token = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ message: "Not Token, Unauthorized." });
-  }
+    if (!token) {
+      return res.status(401).json({ message: "Authorization failed" });
+    }
 
-  // token verification
-  // const tokenIsValid = jwt.verify(token, process.env.SECRET_KEY);
-  try {
-    const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    req.user = decoded.user;
-    next();
-  } catch (err) {
-    res.status(401).json({ message: "Forbidden." });
-  }
+    try {
+      const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+      const userRole = decodedToken.role;
 
-  return res.status(401).json({ message: "Unauthorized." });
+      if (userRole !== requiredRole) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      req.user = decodedToken;
+      next();
+    } catch (error) {
+      res.status(401).json({ message: "Authorization failed" });
+    }
+  };
 };
 
-module.exports = authPermission;
+module.exports = authMiddleware;

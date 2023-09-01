@@ -8,6 +8,8 @@ import Footer from "../../components/student/layouts/Footer";
 import './App.css';
 import './Home.css'
 import RadioPlayer from '../../components/radio/RadioPlayer';
+import ChatForm from '../../components/student/ChatForm';
+import ChatHistory from '../../components/student/ChatHistory';
 
 export default function Home() {
 
@@ -16,7 +18,15 @@ export default function Home() {
       <Header />
       <SideBar />
       <main id="main" className="main">
-      <RadioPlayer />
+        <section>
+        <RadioPlayer />
+        </section>
+        <section>
+          <div className="row mt-4">
+            <ChatForm />
+            <ChatHistory />
+          </div>
+        </section>
       </main>
       {/* <Footer /> */}
     </>

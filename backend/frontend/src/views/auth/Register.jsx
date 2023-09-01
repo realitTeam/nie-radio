@@ -45,17 +45,17 @@ export default function Register() {
                                             className="logo d-flex align-items-center w-auto"
                                         >
                                             <img src="assets/img/logo.png" alt="" />
-                                            <span className="d-none d-lg-block">NIE Radio</span>
+                                            <span className="d-none d-lg-block">NIE RADIO</span>
                                         </a>
                                     </div>
-                                    <div className="card mb-3">
+                                    <div className="card lgn_crd_bg_lgt mb-3">
                                         <div className="card-body">
                                             <div className="pt-2">
                                                 <h5 className="card-title text-start pb-0 fs-4">
                                                     <strong>Register</strong>
                                                 </h5>
                                                 <hr />
-                        
+
                                                 <form onSubmit={handleFormSubmit} method="POST" className="row g-3" name="studentForm" id="studentForm">
                                                     <div className="col-12 mb-2">
                                                         <label htmlFor="refferal_code" className="form-label">

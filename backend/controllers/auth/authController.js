@@ -206,23 +206,14 @@ const userLogin = asyncHandler(async (req, res) => {
     // if pws are not matched
     if (!pwIsValid) {
       return res.status(401).send({
-        accessToken: null,
         message: "Invalid Password!",
       });
     }
 
     // generate token
-    const accessToken = jwt.sign(
-      { username: user.username },
-      process.env.SECRET_KEY,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ username: user.username, role: user.role }, process.env.SECRET_KEY);
+    res.status(200).json({ token: token, role: user.role });
 
-    // Store JWT in local storage
-    // localStorage.setItem("token", accessToken);
-
-    // return token
-    res.json({ accessToken, role: user.role });
   } else if (user.status === "inactive") {
     // User is inactive, handle the inactive user scenario
     return res.status(403).json({ message: "User is not authorized." });
@@ -230,6 +221,31 @@ const userLogin = asyncHandler(async (req, res) => {
 
 });
 
+// #####################################################################################################
+// logged user details   ############################################################################################
+// #####################################################################################################
+//-------------------------------------------------------------------------------------------------------
+// @desc get logged user details
+// @route get: /user/username
+// @access private
+const loggedUserDetails = asyncHandler(async (req, res) => {
+  const user_email = req.params.username;
+
+  const moderator = await Moderator.findOne({ organization_email: user_email });
+  const student = await Student.findOne({ student_email: user_email });
+
+  if (moderator) {
+    const moderatorDetails = {
+      name: moderator.organization_name
+    };
+    res.status(200).json(moderatorDetails);
+  } else if (student) {
+    const studentDetails = {
+      name: student.student_name
+    };
+    res.status(200).json(studentDetails);
+  };
+});
 // #####################################################################################################
 // logout   ############################################################################################
 // #####################################################################################################
@@ -250,4 +266,5 @@ module.exports = {
   studentRegister,
   userLogin,
   userLogout,
+  loggedUserDetails
 };

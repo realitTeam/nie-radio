@@ -1,29 +1,96 @@
+// MAllStudents.jsx
 import React, { useState, useEffect } from "react";
-import { viewStudents } from "../../../actions/moderator/Student";
+import axios from 'axios'
+import jwtDecode from "jwt-decode";
 
 import Header from "../../../components/moderator/layouts/Header";
 import SideBar from "../../../components/moderator/layouts/SideBar";
 import Footer from "../../../components/moderator/layouts/Footer";
 
-import "./AllStudents.css";
+// function StudentModal({ selectedStudent, onClose }) {
+//   const toggleStudentStatus = async () => {
+//     try {
+//       const student_email = selectedStudent.student_email;
+//       await axios.put(`/api/moderator/students/status/${student_email}`);
+//       // Update the moderator status in the selectedStudent object
+//       selectedStudent.student_status = selectedStudent.student_status === "active" ? "inactive" : "active";
+//       // Close the modal after toggling
+//       onClose();
+//     } catch (error) {
+//       console.error("Error toggling student status", error);
+//     }
+//   };
 
-export default function AllStudents() {
+//   return (
+//     <div className="modal">
+//       <div className="modal-dialog modal-lg modal-dialog-centered">
+//         <div className="modal-content">
+//           <div className="modal-header">
+//             <h5 className="modal-title">{selectedStudent.refferal_code}</h5>
+//             <button type="button" className="btn-close" onClick={onClose}></button>
+//           </div>
+//           <div className="modal-body">
+//             <div className="row">
+//               <div className="col-md-6">
+//                 <div>Student's Name:</div>
+//                 <div className="fw-bold">{selectedStudent.student_name}</div>
+//               </div>
+//               <div className="col-md-6">
+//                 <div>Student ID:</div>
+//                 <div className="fw-bold">{selectedStudent.student_id}</div>
+//               </div>
+
+//               <div className="col-md-12">
+//                 <div>Grade:</div>
+//                 <div className="fw-bold">{selectedStudent.student_grade}</div>
+//               </div>
+//               <div className="col-md-6">
+//                 <div>Email:</div>
+//                 <div className="fw-bold">{selectedStudent.student_email}</div>
+//               </div>
+
+//               <div className="col-md-6">
+//                 <div>Phone:</div>
+//                 <div className="fw-bold">{selectedStudent.student_phone}</div>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="modal-footer">
+//             <button onClick={toggleStudentStatus} className="btn btn-sm btn-info">
+//               {selectedStudent.student_status === "active" ? "Inactive" : "Active"}
+//             </button>
+//             <button onClick={onClose} className="btn btn-sm btn-danger">
+//               Close
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+export default function MAllStudents() {
   const [students, setStudents] = useState([]);
-  const [selectedStudent, setSelectedStudent] = useState(null);
+  // const [selectedStudent, setSelectedStudent] = useState(null);
+
+  // const handleViewStudent = (student) => {
+  //   setSelectedStudent(student);
+  // };
+
+  const token = localStorage.getItem("token");
+  const tokenPayload = jwtDecode(token);
+
+  const username = tokenPayload.username;
 
   useEffect(() => {
     async function fetchStudents() {
-      const studentsData = await viewStudents();
-      setStudents(studentsData);
+      const studentsData = await axios.get(`/api/moderator/students/${username}`);
+      setStudents(studentsData.data);
     }
     fetchStudents();
   }, []);
 
-  const handleViewStudent = (student) => {
-    event.preventDefault();
-    setSelectedStudent(student);
-    console.log(student);
-  };
 
   return (
     <>
@@ -46,12 +113,9 @@ export default function AllStudents() {
         <section className="section">
           <div className="row">
             <div className="col-lg-12">
-              <div className="card mb-3">
+              <div className="card crd_bg_lgt mb-3">
                 <div className="card-body">
                   <div className="pt-2 pb-2">
-                    <h5 className="card-title text-start pb-0 fs-4">
-                      All Students
-                    </h5>
                   </div>
 
                   <table className="table ">
@@ -60,7 +124,8 @@ export default function AllStudents() {
                         <th scope="col">Name</th>
                         <th scope="col">ID/Grade</th>
                         <th scope="col">Contact</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Status</th>
+                        {/* <th scope="col">Actions</th> */}
                       </tr>
                     </thead>
                     <tbody>
@@ -78,50 +143,40 @@ export default function AllStudents() {
                               {student.student_phone}
                             </td>
                             <td className="align-middle">
-                              <a
-                                href=""
-                                className="btn btn-sm btn-warning"
+                              <span
+                                className={`badge badge-sm text-bg-${student.student_status === "active"
+                                  ? "info"
+                                  : "warning"
+                                  }`}
+                              >
+                                {student.student_status}
+                              </span>
+                            </td>
+                            {/* <td className="align-middle">
+                              <button
+                                className="btn btn-sm btn-primary"
                                 onClick={() => handleViewStudent(student)}
                               >
                                 View
-                              </a>
-                            </td>
+                              </button>
+                            </td> */}
+
                           </tr>
                         ))}
                     </tbody>
                   </table>
-
-                  {selectedStudent && (
-                    <div className="modal">
-                      <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <div className="pagetitle">
-                              {selectedStudent.student_name}
-                            </div>
-                          </div>
-                          <div className="modal-body">
-                            <p>ID: {selectedStudent.student_id}</p>
-                            <p>Grade: {selectedStudent.student_grade}</p>
-                            <p>Email: {selectedStudent.student_email}</p>
-                            <p>Phone: {selectedStudent.student_phone}</p>
-                          </div>
-                          <div className="modal-footer">
-                            <button onClick={() => setSelectedStudent(null)} className="btn btn-sm btn-danger">
-                              Close
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
           </div>
         </section>
       </main>
-      {/* <Footer /> */}
+      {/* {selectedStudent && (
+        <StudentModal
+          selectedStudent={selectedStudent}
+          onClose={() => setSelectedStudent(null)}
+        />
+      )} */}
     </>
   );
 }

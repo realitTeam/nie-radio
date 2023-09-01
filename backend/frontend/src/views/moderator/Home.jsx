@@ -14,7 +14,9 @@ export default function Home() {
       <Header />
       <SideBar />
       <main id="main" className="main">
+        <section>
         <RadioPlayer />
+        </section>
       </main>
       {/* <Footer /> */}
     </>
