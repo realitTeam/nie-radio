@@ -51,7 +51,7 @@ export default function Register() {
                         showConfirmButton: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '/student';
+                            window.location.href = '/login';
                         }
                     });
                 }
