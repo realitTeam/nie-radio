@@ -1,12 +1,14 @@
 // AllModerators.jsx
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
+
 import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
 
 function ModeratorModal({ selectedModerator, onClose }) {
   const toggleModeratorStatus = async () => {
+    
     try {
       // Call an API to toggle the status
       const moderator_email = selectedModerator.organization_email;

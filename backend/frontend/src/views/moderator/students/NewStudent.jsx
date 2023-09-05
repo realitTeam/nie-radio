@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
 import jwtDecode from "jwt-decode";
+import Swal from "sweetalert2";
 
 import Header from "../../../components/moderator/layouts/Header";
 import SideBar from "../../../components/moderator/layouts/SideBar";
@@ -16,7 +17,6 @@ export default function NewStudent() {
         axios.get(`/api/moderator/reff/${username}`)
             .then(response => {
                 setReffData(response.data);
-                console.log(response);
             })
             .catch(error => {
                 console.error("Error fetching user data:", error);
@@ -27,20 +27,72 @@ export default function NewStudent() {
 
 
     const [formData, setFormData] = useState({});
+
+    const displayErrorAlert = (message) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: message,
+        });
+    };
     // Function to handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post("/api/moderator/students/store", formData);
-            if (response && response.message) {
-                alert(response.message); // Show the success message in an alert
-                window.location.reload();
-            }
-        } catch (error) {
-            if (error.response && error.response.data) {
-                alert(error.response.data.message); // Show the error message in an alert
-            } else {
-                alert("An error occurred. Please try again later.");
+
+        const validPhonePattern = /^0\d{9}$/;
+        if (!formData.student_name) {
+            displayErrorAlert("Student's name is required.");
+        } else if (!formData.student_id) {
+            displayErrorAlert("Student ID is required.");
+        } else if (!formData.student_grade) {
+            displayErrorAlert("Grade is required.");
+        } else if (!formData.student_email) {
+            displayErrorAlert("Email is required.");
+        } else if (!formData.student_phone) {
+            displayErrorAlert("Phone is required.");
+        } else if (!validPhonePattern.test(formData.student_phone)) {
+            displayErrorAlert("Invalid Phone format.");
+        } else {
+            try {
+                const response = await axios.post("/api/moderator/students/store", formData);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Student successfully registered.',
+                    timer: 2500, // Display for 3 seconds
+                    showConfirmButton: false, // Hide the "OK" button
+                }).then(() => {
+                    window.location.reload();
+                });
+            } catch (error) {
+                console.log(error)
+                if (error.response && error.response.status === 400) {
+                    // Handle validation error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please check input values and try again.',
+                    });
+                } else if (error.response && error.response.status === 401) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Invalid Reference ID.',
+                    });
+                } else if (error.response && error.response.status === 409) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Student already exists.',
+                    });
+                } else {
+                    // Handle other server errors
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while submitting. Please try again later.',
+                    });
+                }
             }
         }
     };
@@ -48,7 +100,7 @@ export default function NewStudent() {
     const handleChange = (e) => {
         setFormData({
             ...formData,
-            refferal_code: reffData.refferal_code, 
+            refferal_code: reffData.refferal_code,
             [e.target.id]: e.target.value,
         });
     }
@@ -86,7 +138,7 @@ export default function NewStudent() {
                                                 >
                                                     <i className="bi bi-upc-scan"></i>
                                                 </span>
-                                                <input onChange={handleChange}
+                                                <input readOnly onChange={handleChange}
                                                     type="text"
                                                     name="refferal_code"
                                                     className="form-control"
@@ -104,7 +156,7 @@ export default function NewStudent() {
                                                 name="student_name"
                                                 className="form-control"
                                                 id="student_name"
-                                                required
+                                                
                                             />
                                         </div>
                                         <div className="col-6">
@@ -116,7 +168,7 @@ export default function NewStudent() {
                                                 name="student_id"
                                                 className="form-control"
                                                 id="student_id"
-                                                required
+                                                
                                             />
                                         </div>
                                         <div className="col-6">
@@ -124,6 +176,7 @@ export default function NewStudent() {
                                                 Grade <span className="text-danger">*</span>
                                             </label>
                                             <select onChange={handleChange} className="form-select" aria-label="Default select example" name="student_grade" id="student_grade">
+                                                <option disabled selected>--select--</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -148,7 +201,7 @@ export default function NewStudent() {
                                                 name="student_email"
                                                 className="form-control"
                                                 id="student_email"
-                                                required
+                                                
                                             />
                                         </div>
                                         <div className="col-6">
@@ -160,7 +213,7 @@ export default function NewStudent() {
                                                 name="student_phone"
                                                 className="form-control"
                                                 id="student_phone"
-                                                required
+                                                
                                             />
                                         </div>
                                         <div className="col-12">

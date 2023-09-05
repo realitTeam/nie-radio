@@ -1,25 +1,88 @@
 // Register.jsx
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Swal from "sweetalert2";
+
 import "../../assets/css/auth/Register.css";
-import { createStudent } from '../../actions/auth/CreateStudent'
 
 export default function Register() {
     const [formData, setFormData] = useState({});
 
+    const displayErrorAlert = (message) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: message,
+        });
+    };
+
     // Function to handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await createStudent(formData);
-            if (response && response.message) {
-                alert(response.message); // Set the message received from the server
-                window.location.href = '/student';
-            }
-        } catch (error) {
-            if (error.response && error.response.data) {
-                alert(error.response.data.message); // Set the error message from the server
-            } else {
-                alert("An error occurred. Please try again later.");
+
+        const validReferralCodePattern = /^[A-Za-z]\d{5}$/;
+        const validPhonePattern = /^0\d{9}$/;
+        if (!formData.refferal_code) {
+            displayErrorAlert("Reference ID is required.");
+        } else if (!validReferralCodePattern.test(formData.refferal_code)) {
+            displayErrorAlert("Invalid Reference ID.");
+        } else if (!formData.student_name) {
+            displayErrorAlert("Student's name is required.");
+        } else if (!formData.student_id) {
+            displayErrorAlert("Student ID is required.");
+        } else if (!formData.student_grade) {
+            displayErrorAlert("Grade is required.");
+        } else if (!formData.student_email) {
+            displayErrorAlert("Email is required.");
+        } else if (!formData.student_phone) {
+            displayErrorAlert("Phone is required.");
+        } else if (!validPhonePattern.test(formData.student_phone)) {
+            displayErrorAlert("Invalid Phone format.");
+        } else if (!formData.password) {
+            displayErrorAlert("Password is required.");
+        } else {
+            try {
+                const response = await axios.post("/api/register", formData);
+                if (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Use your email and password to login.',
+                        showConfirmButton: true,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/student';
+                        }
+                    });
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 400) {
+                    // Handle validation error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please check input values and try again.',
+                    });
+                } else if (error.response && error.response.status === 401) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Invalid Reference ID.',
+                    });
+                } else if (error.response && error.response.status === 409) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Student already exists.',
+                    });
+                } else {
+                    // Handle other server errors
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while submitting. Please try again later.',
+                    });
+                }
             }
         }
     };
@@ -86,7 +149,7 @@ export default function Register() {
                                                             name="student_name"
                                                             className="form-control"
                                                             id="student_name"
-                                                            required
+
                                                         />
                                                     </div>
                                                     <div className="col-6">
@@ -98,7 +161,7 @@ export default function Register() {
                                                             name="student_id"
                                                             className="form-control"
                                                             id="student_id"
-                                                            required
+
                                                         />
                                                     </div>
                                                     <div className="col-6">
@@ -106,6 +169,7 @@ export default function Register() {
                                                             Grade <span className="text-danger">*</span>
                                                         </label>
                                                         <select onChange={handleChange} className="form-select" aria-label="Default select example" name="student_grade" id="student_grade">
+                                                            <option selected disabled>--select--</option>
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
@@ -130,7 +194,7 @@ export default function Register() {
                                                             name="student_email"
                                                             className="form-control"
                                                             id="student_email"
-                                                            required
+
                                                         />
                                                     </div>
                                                     <div className="col-6">
@@ -142,7 +206,7 @@ export default function Register() {
                                                             name="student_phone"
                                                             className="form-control"
                                                             id="student_phone"
-                                                            required
+
                                                         />
                                                     </div>
                                                     <div className="col-12">
@@ -154,7 +218,7 @@ export default function Register() {
                                                             name="password"
                                                             className="form-control"
                                                             id="password"
-                                                            required
+
                                                         />
                                                     </div>
 
@@ -166,7 +230,6 @@ export default function Register() {
                                                                 type="checkbox"
                                                                 value=""
                                                                 id="acceptTerms"
-                                                                required
                                                             />
                                                             <label className="form-check-label" htmlFor="acceptTerms">
                                                                 I agree and accept the{" "}

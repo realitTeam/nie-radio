@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
+import Swal from 'sweetalert2';
+
+
 import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
@@ -9,22 +12,70 @@ import Footer from "../../../components/admin/layouts/Footer";
 export default function ANewRecording() {
     const [formData, setFormData] = useState({});
 
+    const displayErrorAlert = (message) => {
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: message,
+        });
+    };
+
     // Function to handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-        
+
+        // Validation checks
+        if (!formData.session_name || !formData.session_link) {
+            displayErrorAlert('Session Name and Session Link are required.');
+            return;
+        }
+
+        // URL validation (you can use a regex pattern)
+        const urlPattern = /^https?:\/\/.+/;
+        if (!urlPattern.test(formData.session_link)) {
+            displayErrorAlert('Session Link must be a valid URL.');
+            return;
+        }
+
+        if (formData.session_description.length > 150) {
+            displayErrorAlert('Description must not exceed 150 characters.');
+            return;
+        }
+
         try {
             const response = await axios.post("/api/admin/recordings/store", formData);
-            if (response && response.message) {
-                alert(response.message);
-                window.location.reload();
+            if (response && response.status === 201) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Recording successfully submitted.',
+                    timer: 2500, // Display for 3 seconds
+                    showConfirmButton: false, // Hide the "OK" button
+                  }).then(() => {
+                    window.location.reload();
+                  });
             }
         } catch (error) {
-            if (error.response && error.response.data) {
-                console.log(error)
-                alert(error.response.data.message); // Show the error message in an alert
+            if (error.response && error.response.status === 400) {
+                // Handle validation error
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please check input values and try again.',
+                });
+            }else if (error.response && error.response.status === 409){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Session already exist.',
+                });
             } else {
-                alert("An error occurred. Please try again later.");
+                // Handle other server errors
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while submitting. Please try again later.',
+                });
             }
         }
     };
@@ -63,12 +114,7 @@ export default function ANewRecording() {
                                                 Session Name <span className="text-danger">*</span>
                                             </label>
                                             <div className="input-group has-validation">
-                                                <span
-                                                    className="input-group-text"
-                                                    id="inputGroupPrepend"
-                                                >
-                                                    <i className="bi bi-upc-scan"></i>
-                                                </span>
+
                                                 <input onChange={handleChange}
                                                     type="text"
                                                     name="session_name"
@@ -87,7 +133,7 @@ export default function ANewRecording() {
                                                 name="session_subject"
                                                 className="form-control"
                                                 id="session_subject"
-                                                required
+
                                             />
                                         </div>
                                         <div className="col-4">
@@ -95,6 +141,7 @@ export default function ANewRecording() {
                                                 Grade
                                             </label>
                                             <select onChange={handleChange} className="form-select" aria-label="Default select example" name="session_grade" id="session_grade">
+                                                <option disabled selected>--select--</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -119,7 +166,7 @@ export default function ANewRecording() {
                                                 name="session_language"
                                                 className="form-control"
                                                 id="session_language"
-                                                required
+
                                             />
                                         </div>
                                         <div className="col-12">
@@ -131,7 +178,7 @@ export default function ANewRecording() {
                                                 name="session_link"
                                                 className="form-control"
                                                 id="session_link"
-                                                required
+
                                             />
                                         </div>
                                         <div className="col-12">

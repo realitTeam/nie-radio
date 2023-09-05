@@ -1,3 +1,4 @@
+// ModeratorModel.js
 const mongoose = require('mongoose');
 
 const moderatorSchema = new mongoose.Schema(

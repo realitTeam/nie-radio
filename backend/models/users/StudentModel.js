@@ -1,7 +1,13 @@
+// StudentModel.js
 const mongoose = require('mongoose');
 
 const studentSchema = new mongoose.Schema(
     {
+        moderator: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Moderator',
+            required: true
+        },
         refferal_code: {
             type: String,
             required: true
@@ -25,7 +31,7 @@ const studentSchema = new mongoose.Schema(
         },
         student_phone: {
             type: String,
-            unique: true,
+            unique: false,
             required: true
         },
         password: {

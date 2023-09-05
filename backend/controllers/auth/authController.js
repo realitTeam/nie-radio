@@ -10,11 +10,6 @@ const Student = require("../../models/users/StudentModel");
 const Login = require("../../models/login/LoginModel");
 
 // #####################################################################################################
-// #####################################################################################################
-// #####################################################################################################
-// @desc create new moderator
-// @route post: /m
-// @access private
 const moderatorRegister = asyncHandler(async (req, res) => {
   const {
     organization_name,
@@ -92,13 +87,7 @@ const moderatorRegister = asyncHandler(async (req, res) => {
   }
 });
 
-// #####################################################################################################
-// #####################################################################################################
-// #####################################################################################################
 //-------------------------------------------------------------------------------------------------------
-// @desc create new user
-// @route post: /users
-// @access private
 const studentRegister = asyncHandler(async (req, res) => {
   const {
     refferal_code,
@@ -109,33 +98,25 @@ const studentRegister = asyncHandler(async (req, res) => {
     student_phone,
     password,
   } = req.body;
-
   // validating inputs
   if (!student_email || !password) {
-    return res.json({ message: "All fields are required." });
+    return res.status(400).json({ message: "All fields are required." });
   }
   // validating refferal code
   const ref_code = await Moderator.findOne({ refferal_code }).lean().exec();
   if (!ref_code) {
-    return res
-      .status(409)
-      .json({ message: "Please provide valid refferal code." });
+    return res.status(401).json({ message: "Invalid Reference ID." });
   }
-
   // checking existing users
-  const duplicate_email = await Student.findOne({ student_email })
-    .lean()
-    .exec();
-  const duplicate_id = await Student.findOne({ student_id }).lean().exec();
-  if (duplicate_email || duplicate_id) {
-    return res.status(409).json({
-      message: "Student already exist, Check your Student ID or Email.",
-    });
+  const duplicate_email = await Student.findOne({ student_email }).lean().exec();
+  if (duplicate_email) {
+    return res.status(409).json({message: "Student already exist."});
   }
-  // hashing pw
+  const moderator_id = ref_code._id;
   const hashedPW = await bcrypt.hash(password, 10);
   const student_status = "active";
   const studentObject = {
+    moderator:moderator_id,
     refferal_code,
     student_name,
     student_id,
@@ -145,8 +126,6 @@ const studentRegister = asyncHandler(async (req, res) => {
     password: hashedPW,
     student_status: student_status,
   };
-
-  // login object
   const role = "student";
   const studentLoginObject = {
     username: student_email,
@@ -164,7 +143,7 @@ const studentRegister = asyncHandler(async (req, res) => {
   const accessToken = jwt.sign(
     { username: student.username },
     process.env.SECRET_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "24h" }
   );
 
   // Store JWT in local storage
@@ -177,13 +156,7 @@ const studentRegister = asyncHandler(async (req, res) => {
   }
 });
 
-// #####################################################################################################
-// login   #############################################################################################
-// #####################################################################################################
 //-------------------------------------------------------------------------------------------------------
-// @desc authenticate the user and the token
-// @route post: /login
-// @access public
 const userLogin = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
 
@@ -205,7 +178,7 @@ const userLogin = asyncHandler(async (req, res) => {
 
     // if pws are not matched
     if (!pwIsValid) {
-      return res.status(401).send({
+      return res.status(400).send({
         message: "Invalid Password!",
       });
     }

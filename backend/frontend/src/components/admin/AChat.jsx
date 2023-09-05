@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import jwtDecode from "jwt-decode";
 
+import "./achat.css"
+
 const AChat = () => {
   const [tickets, setTickets] = useState([]);
-  const [selectedTicket, setSelectedTicket] = useState(null); // To track the selected ticket for the modal
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const [formData, setFormData] = useState({});
+  const tableContainerRef = useRef(null);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -16,13 +19,12 @@ const AChat = () => {
     const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
 
     const day = date.getDate();
-    const month = date.getMonth() + 1; // Adding 1 since months are 0-indexed
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
     return `${formattedHours}:${minutes.toString().padStart(2, "0")}${ampm} | ${day}-${month}-${year}`;
   };
 
-  // Function to fetch updated ticket list
   const fetchUpdatedTickets = async () => {
     try {
       const ticketsData = await axios.get(`/api/admin/tickets`);
@@ -40,19 +42,26 @@ const AChat = () => {
     fetchTickets();
   }, []);
 
+  // Scroll to the bottom when tickets change
+  useEffect(() => {
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollTop = tableContainerRef.current.scrollHeight;
+    }
+  }, [tickets]);
+
   const openModal = (ticket) => {
     setSelectedTicket(ticket);
   };
 
-  // Function to handle form submission
   const handleReplySubmit = async (e) => {
     e.preventDefault(); 
     try {
       const response = await axios.post(`/api/admin/tickets/reply`, formData);
-      // Clear the formData state
       setFormData({});
-      // Fetch updated tickets
       fetchUpdatedTickets();
+      // Close the modal
+    const modal_rply = new bootstrap.Modal(document.getElementById("replyChatModal"));
+    modal_rply.close();
     } catch (error) {
       console.error("Error posting reply", error);
     }
@@ -71,38 +80,40 @@ const AChat = () => {
       <div className="col-md-12">
         <div className="card chat_crd_bg_lgt">
           <div className="card-body">
-            <table className="table">
-              <tbody>
-                {tickets &&
-                  tickets.map((ticket) => (
-                    <tr key={ticket.id}>
-                      <td>
-                        <span className="text-secondary text-left" style={{ fontSize: 'small', fontWeight: 'bolder', marginTop: '0.5em' }}>
-                          {ticket.user_name}
-                        </span>
-                        <br />
-                        <span className="text-left">{ticket.ticket_content}</span>
-                        <br />
-                        <span className="text-secondary text-left" style={{ fontSize: 'small', fontStyle: 'italic', marginTop: '0.5em' }}>
-                          {formatTimestamp(ticket.createdAt)}
-                        </span>
-                      </td>
-                      <td className="text-right">
-                        <button id="reply" className="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => openModal(ticket)}>
-                          <i className="bi bi-reply-fill"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+            <div ref={tableContainerRef} className="table_container">
+              <table className="table">
+                <tbody>
+                  {tickets &&
+                    tickets.map((ticket) => (
+                      <tr key={ticket.id}>
+                        <td>
+                          <span className="text-secondary text-left" style={{ fontSize: 'small', fontWeight: 'bolder', marginTop: '0.5em' }}>
+                            {ticket.user_name}
+                          </span>
+                          <br />
+                          <span className="text-left">{ticket.ticket_content}</span>
+                          <br />
+                          <span className="text-secondary text-left" style={{ fontSize: 'small', fontStyle: 'italic', marginTop: '0.5em' }}>
+                            {formatTimestamp(ticket.createdAt)}
+                          </span>
+                        </td>
+                        <td className="text-right">
+                          <button id="reply" className="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#replyChatModal" onClick={() => openModal(ticket)}>
+                            <i className="bi bi-reply-fill"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Modal */}
       {selectedTicket && (
-        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal fade" id="replyChatModal" tabIndex="-1" aria-labelledby="replyChatModalLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-body modal_crd_bg_lgt">
@@ -125,7 +136,7 @@ const AChat = () => {
                         name="ticket_reply"
                         className="form-control"
                         id="ticket_reply"
-                        value={formData.ticket_reply || ''} // Set the value of the input
+                        value={formData.ticket_reply || ''}
                       />
                       <span
                         className="input-group-text"
@@ -138,7 +149,7 @@ const AChat = () => {
                         className="input-group-text"
                         id="inputGroupPrepend">
                         <button className="btn btn-sm btn-success">
-                          <i class="bi bi-telephone-plus-fill"></i>
+                          <i className="bi bi-telephone-plus-fill"></i>
                         </button>
                       </span>
                     </div>
@@ -149,7 +160,6 @@ const AChat = () => {
           </div>
         </div>
       )};
-
     </>
   );
 };

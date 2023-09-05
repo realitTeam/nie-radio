@@ -1,10 +1,7 @@
-// Admin-Header-Component
-import React from "react";
-import { useState, useEffect } from "react";
-import {  Navigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+// import { useHistory } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import axios from "axios";
-// import { useHistory } from "react-router-dom";
 
 export default function ProfileDropdown() {
     // const history = useHistory();
@@ -14,6 +11,7 @@ export default function ProfileDropdown() {
     const tokenPayload = jwtDecode(token);
 
     const username = tokenPayload.username;
+    const userrole = tokenPayload.role;
 
     useEffect(() => {
         // Make an API call to get user data based on the user ID
@@ -24,17 +22,23 @@ export default function ProfileDropdown() {
             .catch(error => {
                 console.error("Error fetching user data:", error);
             });
-    },
-        [username]);
+    }, [username]);
 
     const handleSignOut = () => {
         // Remove the token from local storage
         localStorage.removeItem("token");
-        // Redirect to the login page
-        // window.location.href ('/')
-        // history.push("/login");
-        return <Navigate to="/login" />;
+        window.location.reload()
     };
+
+    // const handleProfileClick = () => {
+    //     if (userrole === 'admin') {
+    //         window.location.href("/admin/profile");
+    //     } else if (userrole === 'moderator') {
+    //         window.location.href("/moderator/profile");
+    //     } else if (userrole === 'student') {
+    //         window.location.href("/student/profile");
+    //     }
+    // };
 
     return (
         <>
@@ -50,10 +54,7 @@ export default function ProfileDropdown() {
                     <hr className="dropdown-divider" />
                 </li>
                 <li>
-                    <a
-                        className="dropdown-item d-flex align-items-center"
-                        href="users-profile.html"
-                    >
+                    <a className="dropdown-item d-flex align-items-center" onClick="#">
                         <i className="bi bi-gear"></i>
                         <span>Profile</span>
                     </a>
@@ -68,7 +69,6 @@ export default function ProfileDropdown() {
                     </a>
                 </li>
             </ul>
-
         </>
     );
 }

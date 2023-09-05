@@ -76,7 +76,7 @@ const aStoreModerator = asyncHandler(async (req, res) => {
   } = req.body;
   var password = '12345678'
   if (!organization_name || !organization_address || !province || !district || !organization_email || !organization_phone || !principal_name || !principal_email || !principal_phone) {
-    return res.json({ message: "All fields are required." });
+    return res.status(400).json({ message: "All fields are required." });
   }
   const duplicate_moderator = await Moderator.findOne({ organization_email })
     .lean()
@@ -137,27 +137,25 @@ const aStoreStudent = asyncHandler(async (req, res) => {
     student_phone
   } = req.body;
   const password = '76543210'
-  if (!student_email) {
-    return res.json({ message: "All fields are required." });
-  }
-  const ref_code = await Moderator.findOne({ refferal_code }).lean().exec();
-  if (!ref_code) {
-    return res
-      .status(409)
-      .json({ message: "Please provide valid refferal code." });
-  }
-  const duplicate_email = await Student.findOne({ student_email })
-    .lean()
-    .exec();
-  const duplicate_id = await Student.findOne({ student_id }).lean().exec();
-  if (duplicate_email || duplicate_id) {
-    return res.status(409).json({
-      message: "Student already exist, Check your Student ID or Email.",
-    });
-  }
+ // validating inputs
+ if (!student_email) {
+  return res.status(400).json({ message: "All fields are required." });
+}
+// validating refferal code
+const ref_code = await Moderator.findOne({ refferal_code }).lean().exec();
+if (!ref_code) {
+  return res.status(401).json({ message: "Invalid Reference ID." });
+}
+// checking existing users
+const duplicate_email = await Student.findOne({ student_email }).lean().exec();
+if (duplicate_email) {
+  return res.status(409).json({message: "Student already exist."});
+}
+const moderator_id = ref_code._id;
   const hashedPW = await bcrypt.hash(password, 10);
   const student_status = "active";
   const studentObject = {
+    moderator:moderator_id,
     refferal_code,
     student_name,
     student_id,
@@ -197,6 +195,7 @@ const aStoreRecording = asyncHandler(async (req, res) => {
     return res.json({ message: "Fill all required fields." });
   }
   const duplicate_recording = await Recording.findOne({ session_link }).lean().exec();
+  console.log(duplicate_recording);
   if (duplicate_recording) {
     return res
       .status(409)

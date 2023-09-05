@@ -38,6 +38,7 @@ const sStoreChatContent = asyncHandler(async (req, res) => {
     ticket_content,
     ticket_status:ticket_status,
   };
+  console.log(chatObject)
   const ticket = await Chat.create(chatObject);
   if (ticket) {
     res.status(201).json({ message: `Message Sent` });

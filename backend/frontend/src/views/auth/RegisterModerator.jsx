@@ -1,12 +1,25 @@
 // RegisterModerator.jsx
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 import "../../assets/css/auth/Register.css";
+
 import { createModerator } from "../../actions/auth/CreateModerator";
 
 export default function RegisterModerator() {
   const [formData, setFormData] = useState({});
   const [district, setDistrict] = useState("");
+  const [provinceOptions, setProvinceOptions] = useState([]);
+  const [districtOptions, setDistrictOptions] = useState([]);
+
+  const displayErrorAlert = (message) => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Validation Error',
+      text: message,
+    });
+  };
 
   // Function to generate referral code based on the district
   const generateReferralCode = (district) => {
@@ -16,20 +29,79 @@ export default function RegisterModerator() {
   };
 
   // Function to handle form submission
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await createModerator(formData);
-      if (response && response.message) {
-        alert(response.message); // Show the success message in an alert
-        window.location.href = "/";
-      }
-    } catch (error) {
-      if (error.response && error.response.data) {
-        alert(error.response.data.message); // Show the error message in an alert
-      } else {
-        alert("An error occurred. Please try again later.");
+
+    const validPhonePattern = /^0\d{9}$/;
+    if (!formData.organization_name) {
+      displayErrorAlert("Name of the School/Organization is required.");
+    } else if (!formData.organization_address) {
+      displayErrorAlert("Address of the School/Organization is required.");
+    }
+    else if (!formData.province) {
+      displayErrorAlert("Province is required.");
+    }
+    else if (!formData.district) {
+      displayErrorAlert("District is required.");
+    }
+    else if (!formData.organization_email) {
+      displayErrorAlert("School Email is required.");
+    }
+    else if (!formData.organization_phone) {
+      displayErrorAlert("School Phone is required.");
+    } else if (!validPhonePattern.test(formData.organization_phone)) {
+      displayErrorAlert("Invalid School's Phone format.");
+    }
+    else if (!formData.principal_name) {
+      displayErrorAlert("Principal's Name is required.");
+    }
+    else if (!formData.principal_email) {
+      displayErrorAlert("Principal's Email is required.");
+    }
+    else if (!formData.principal_phone) {
+      displayErrorAlert("Principal's Phone is required.");
+    } else if (!validPhonePattern.test(formData.principal_phone)) {
+      displayErrorAlert("Invalid Principal's Phone format.");
+    } else {
+      try {
+        const response = await axios.post(
+          "/api/m",
+          formData
+        );
+        if (response) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "Successfully registered. \nBe patient until administrator's confirmation ",
+            showConfirmButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = '/';
+            }
+          });
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          // Handle validation error
+          Swal.fire({
+            icon: 'error',
+            title: 'Validation Error',
+            text: 'Please check input values and try again.',
+          });
+        } else if (error.response && error.response.status === 409) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Organization already exist.',
+          });
+        } else {
+          // Handle other server errors
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while submitting. Please try again later.',
+          });
+        }
       }
     }
   };
@@ -49,8 +121,38 @@ export default function RegisterModerator() {
         ...formData,
         [id]: value,
       });
+
+      if (id === "province") {
+        // Update the district options based on the selected province
+        const updatedDistrictOptions = getDistrictOptionsByProvince(value);
+        setDistrictOptions(updatedDistrictOptions);
+      }
     }
   };
+
+  // Define province to district mapping
+  const provinceToDistricts = {
+    Central: ["Kandy", "Matale", "Nuwara Eliya"],
+    "North Central": ["Anuradhapura", "Polonnaruwa"],
+    Northern: ["Jaffna", "Kilinochchi", "Mannar", "Vavuniya", "Mullathivu"],
+    Eastern: ["Ampara", "Batticaloa", "Trincomalee"],
+    "North Western": ["Kurunagala", "Puttalam"],
+    Southern: ["Galle", "Hambanthota", "Mathara"],
+    Uva: ["Badulla", "Monaragala"],
+    Sabaragamuwa: ["Kegalle", "Rathnapura"],
+    Western: ["Colombo", "Gampaha", "Kaluthara"],
+  };
+
+  // Get district options based on the selected province
+  const getDistrictOptionsByProvince = (selectedProvince) => {
+    return provinceToDistricts[selectedProvince] || [];
+  };
+
+  useEffect(() => {
+    // Initialize province options
+    const provinces = Object.keys(provinceToDistricts);
+    setProvinceOptions(provinces);
+  }, []);
 
   return (
     <>
@@ -97,7 +199,7 @@ export default function RegisterModerator() {
                             name="organization_name"
                             className="form-control"
                             id="organization_name"
-                            required
+
                           />
                         </div>
 
@@ -115,7 +217,7 @@ export default function RegisterModerator() {
                             name="organization_address"
                             className="form-control"
                             id="organization_address"
-                            required
+
                           />
                         </div>
 
@@ -127,23 +229,17 @@ export default function RegisterModerator() {
                             <select
                               onChange={handleChange}
                               className="form-select"
-                              aria-label="Default select example"
                               name="province"
                               id="province"
                             >
-                              <option value="Central">Central</option>
-                              <option value="Eastern">Eastern</option>
-                              <option value="Northern">Northern</option>
-                              <option value="North Central">
-                                North Central
+                              <option value="" disabled selected>
+                                --select--
                               </option>
-                              <option value="North Western">
-                                North Western
-                              </option>
-                              <option value="Sabaragamuwa">Sabaragamuwa</option>
-                              <option value="Southern">Southern</option>
-                              <option value="Uva">Uva</option>
-                              <option value="Western">Western</option>
+                              {provinceOptions.map((province) => (
+                                <option key={province} value={province}>
+                                  {province}
+                                </option>
+                              ))}
                             </select>
                           </div>
                         </div>
@@ -160,31 +256,14 @@ export default function RegisterModerator() {
                               id="district"
                               value={district}
                             >
-                              <option value="Colombo">Colombo</option>
-                              <option value="Gampaha">Gampaha</option>
-                              <option value="Kalutara">Kalutara</option>
-                              <option value="Kandy">Kandy</option>
-                              <option value="Matale">Matale</option>
-                              <option value="Nuwara Eliya">Nuwara Eliya</option>
-                              <option value="Galle">Galle</option>
-                              <option value="Matara">Matara</option>
-                              <option value="Hambantota">Hambantota</option>
-                              <option value="Jaffna">Jaffna</option>
-                              <option value="Kilinochchi">Kilinochchi</option>
-                              <option value="Mannar">Mannar</option>
-                              <option value="Vavuniya">Vavuniya</option>
-                              <option value="Mullathivu">Mullathivu</option>
-                              <option value="Batticaloa">Batticaloa</option>
-                              <option value="Ampara">Ampara</option>
-                              <option value="Trincomalee">Trincomalee</option>
-                              <option value="Kurunegala">Kurunegala</option>
-                              <option value="Puttalam">Puttalam</option>
-                              <option value="Anuradhapura">Anuradhapura</option>
-                              <option value="Polonnaruwa">Polonnaruwa</option>
-                              <option value="Badulla">Badulla</option>
-                              <option value="Moneragala">Moneragala</option>
-                              <option value="Ratnapura">Ratnapura</option>
-                              <option value="Kegalle">Kegalle</option>
+                              <option value="" disabled>
+                                --select--
+                              </option>
+                              {districtOptions.map((district) => (
+                                <option key={district} value={district}>
+                                  {district}
+                                </option>
+                              ))}
                             </select>
                           </div>
                         </div>
@@ -202,7 +281,7 @@ export default function RegisterModerator() {
                             name="organization_email"
                             className="form-control"
                             id="organization_email"
-                            required
+
                           />
                         </div>
                         <div className="col-6">
@@ -218,7 +297,7 @@ export default function RegisterModerator() {
                             name="organization_phone"
                             className="form-control"
                             id="organization_phone"
-                            required
+
                           />
                         </div>
                         <hr />
@@ -236,7 +315,7 @@ export default function RegisterModerator() {
                             name="principal_name"
                             className="form-control"
                             id="principal_name"
-                            required
+
                           />
                         </div>
                         <div className="col-6">
@@ -253,7 +332,7 @@ export default function RegisterModerator() {
                             name="principal_email"
                             className="form-control"
                             id="principal_email"
-                            required
+
                           />
                         </div>
                         <div className="col-6">
@@ -270,7 +349,7 @@ export default function RegisterModerator() {
                             name="principal_phone"
                             className="form-control"
                             id="principal_phone"
-                            required
+
                           />
                         </div>
                         <hr />
@@ -306,7 +385,7 @@ export default function RegisterModerator() {
                             name="password"
                             className="form-control"
                             id="password"
-                            required
+
                           />
                         </div>
 
@@ -318,6 +397,7 @@ export default function RegisterModerator() {
                               name="accept_terms"
                               type="checkbox"
                               id="accept_terms"
+                              required
                             />
                             <label
                               className="form-check-label"
