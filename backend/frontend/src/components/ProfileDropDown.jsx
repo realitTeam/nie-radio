@@ -15,7 +15,7 @@ export default function ProfileDropdown() {
 
     useEffect(() => {
         // Make an API call to get user data based on the user ID
-        axios.get(`/api/user/${username}/details`)
+        axios.get(`http://localhost:8000/api/user/${username}/details`)
             .then(response => {
                 setUserData(response.data);
             })
@@ -24,21 +24,21 @@ export default function ProfileDropdown() {
             });
     }, [username]);
 
+    // const handleProfile = () => {
+    //     if(userrole=='admin'){
+    //         alert("admin");
+    //     }else if(userrole=='moderator'){
+    //         alert("moderator");
+    //     }else if(userrole=='student'){
+    //         alert("student");
+    //     }
+    // };
+
     const handleSignOut = () => {
         // Remove the token from local storage
         localStorage.removeItem("token");
-        window.location.reload()
+        window.location.href('/login')
     };
-
-    // const handleProfileClick = () => {
-    //     if (userrole === 'admin') {
-    //         window.location.href("/admin/profile");
-    //     } else if (userrole === 'moderator') {
-    //         window.location.href("/moderator/profile");
-    //     } else if (userrole === 'student') {
-    //         window.location.href("/student/profile");
-    //     }
-    // };
 
     return (
         <>
@@ -53,12 +53,12 @@ export default function ProfileDropdown() {
                 <li>
                     <hr className="dropdown-divider" />
                 </li>
-                <li>
-                    <a className="dropdown-item d-flex align-items-center" onClick="#">
+                {/* <li>
+                    <a className="dropdown-item d-flex align-items-center" onClick={handleProfile}>
                         <i className="bi bi-gear"></i>
                         <span>Profile</span>
                     </a>
-                </li>
+                </li> */}
                 <li>
                     <hr className="dropdown-divider" />
                 </li>

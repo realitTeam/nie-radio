@@ -1,0 +1,20 @@
+.radio-box{
+    margin-top: -138px;
+    margin-left: 120px;
+  }
+  .contact_hero {
+    background: url("hero-nie.png") no-repeat center center;
+    background-size: cover;
+    padding: 100px 0;
+    height: 710px;
+  }
+  .location_map{
+    height: 500px;
+  }
+  /* Media query for responsiveness */
+  @media (max-width: 768px) {
+    .contact-hero-content,
+    .hero-image {
+      padding: 10px;
+    }
+  }

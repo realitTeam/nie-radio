@@ -5,27 +5,27 @@ import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
 
-function StudentModal({ selectedStudent, onClose }) {
+function StudentModal({ selectedStudent, onClose, updateStudentList }) {
   const toggleStudentStatus = async () => {
     try {
       const student_email = selectedStudent.student_email;
-      await axios.put(`/api/admin/students/status/${student_email}`);
+      await axios.put(`http://localhost:8000/api/admin/students/status/${student_email}`);
       // Update the moderator status in the selectedStudent object
       selectedStudent.student_status = selectedStudent.student_status === "active" ? "inactive" : "active";
       // Close the modal after toggling
-      onClose();
+      updateStudentList();
     } catch (error) {
       console.error("Error toggling student status", error);
     }
   };
 
   return (
-    <div className="modal">
+    <div className="modal fade" id="studentInfoModal" tabIndex="-1" aria-labelledby="studentInfoModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-lg modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{selectedStudent.refferal_code}</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <button type="button" className="btn-close"></button>
           </div>
           <div className="modal-body">
             <div className="row">
@@ -57,9 +57,9 @@ function StudentModal({ selectedStudent, onClose }) {
             <button onClick={toggleStudentStatus} className="btn btn-sm btn-info">
               {selectedStudent.student_status === "active" ? "Inactive" : "Active"}
             </button>
-            <button onClick={onClose} className="btn btn-sm btn-danger">
+            {/* <button onClick={onClose} className="btn btn-sm btn-danger">
               Close
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -72,18 +72,23 @@ export default function AllStudents() {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
 
+  const updateStudentList = async () => {
+    try {
+      const studentsData = await axios.get('http://localhost:8000/api/admin/students');
+      setStudents(studentsData.data);
+    } catch (error) {
+      console.error("Error fetching moderators", error);
+    }
+  };
+
   const handleViewStudent = (student) => {
     setSelectedStudent(student);
   };
 
   useEffect(() => {
-    async function fetchStudents() {
-      const studentsData = await axios.get('/api/admin/students');
-      setStudents(studentsData.data);
-    }
-    fetchStudents();
+    // Fetch the initial list of student
+    updateStudentList();
   }, []);
-
 
   return (
     <>
@@ -136,21 +141,21 @@ export default function AllStudents() {
                               {student.student_phone}
                             </td>
                             <td className="align-middle">
-                            <span
-                              className={`badge badge-sm text-bg-${student.student_status === "active"
-                                ? "info"
-                                : "warning"
-                                }`}
-                            >
-                              {student.student_status}
-                            </span>
-                          </td>
+                              <span
+                                className={`badge badge-sm text-bg-${student.student_status === "active"
+                                  ? "info"
+                                  : "warning"
+                                  }`}
+                              >
+                                {student.student_status}
+                              </span>
+                            </td>
                             <td className="align-middle">
                               <button
-                                href=""
                                 className="btn btn-sm btn-primary"
-                                onClick={() => handleViewStudent(student)}
-                              >
+                                data-bs-toggle="modal"
+                                data-bs-target="#studentInfoModal"
+                                onClick={() => handleViewStudent(student)}>
                                 View
                               </button>
                             </td>
@@ -165,10 +170,7 @@ export default function AllStudents() {
         </section>
       </main>
       {selectedStudent && (
-        <StudentModal
-          selectedStudent={selectedStudent}
-          onClose={() => setSelectedStudent(null)}
-        />
+        <StudentModal selectedStudent={selectedStudent} updateStudentList={updateStudentList} />
       )}
     </>
   );

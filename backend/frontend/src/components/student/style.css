@@ -1,83 +1,22 @@
-/* style.css */
-.radio-section {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 1rem;
-    background-color: #1a1a1a;
-    color: #fff;
-    border-radius: 5px;
-  }
-  
-  .album-art {
-    width: 200px;
-    height: 200px;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-right: 1rem;
-  }
-  
-  .album-art img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .audio-info {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-  }
-  
-  .audio-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-  
-  .audio-description {
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .audio-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .audio-player {
-    width: 100%;
-    max-width: 300px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Customize the appearance of the controls */
-  .audio-player::-webkit-media-controls-panel {
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .audio-player::-webkit-media-controls-play-button {
-    color: #007bff; /* Customize the play button color */
-  }
-  
-  .audio-player::-webkit-media-controls-volume-slider {
-    width: 100px; /* Customize the volume slider width */
-  }
-  
-  /* Add hover and focus effects */
-  .audio-player:hover,
-  .audio-player:focus {
-    border-color: #007bff; /* Change the border color on hover/focus */
-    outline: none;
-  }
-  
+  /* style.css */
+
+/* Add a fixed height to the chat container */
+.chat-container {
+  height: 80vh; /* Adjust this value as needed */
+  overflow-y: auto; /* Add a vertical scrollbar when content overflows */
+}
+
+/* Style for the chat card body */
+.chat-card-body {
+  /* If you want to style the chat card body separately, add your styles here */
+}
+
+/* Style for the chat table */
+.chat-table {
+  /* If you want to style the chat table separately, add your styles here */
+}
+
+/* Style for the chat form */
+.chat-form {
+  /* If you want to style the chat form separately, add your styles here */
+}

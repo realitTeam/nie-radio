@@ -69,45 +69,45 @@ export default function NewModerator() {
             displayErrorAlert("Principal's Phone is required.");
         } else  if (!validPhonePattern.test(formData.principal_phone)) {
             displayErrorAlert("Invalid Principal's Phone format.");
-        }
-          
-        try {
-            const response = await axios.post(
-                "/api/admin/moderators/store",
-                formData
-            );
-            if (response && response.status === 201) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Organization successfully registered.',
-                    timer: 2500, // Display for 3 seconds
-                    showConfirmButton: false, // Hide the "OK" button
-                  }).then(() => {
-                    window.location.reload();
-                  });
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 400) {
-                // Handle validation error
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    text: 'Please check input values and try again.',
-                });
-            }else if (error.response && error.response.status === 409){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Organization already exist.',
-                });
-            } else {
-                // Handle other server errors
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while submitting. Please try again later.',
-                });
+        }else{
+            try {
+                const response = await axios.post(
+                    "http://localhost:8000/api/admin/moderators/store",
+                    formData
+                );
+                if (response && response.status === 201) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Organization successfully registered.',
+                        timer: 2500, // Display for 3 seconds
+                        showConfirmButton: false, // Hide the "OK" button
+                      }).then(() => {
+                        window.location.reload();
+                      });
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 400) {
+                    // Handle validation error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validation Error',
+                        text: 'Please check input values and try again.',
+                    });
+                }else if (error.response && error.response.status === 409){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Organization already exist.',
+                    });
+                } else {
+                    // Handle other server errors
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while submitting. Please try again later.',
+                    });
+                }
             }
         }
     };
@@ -235,7 +235,7 @@ export default function NewModerator() {
                                                     name="province"
                                                     id="province"
                                                 >
-                                                    <option value="" disabled selected>
+                                                    <option value="0" disabled selected>
                                                         --select--
                                                     </option>
                                                     {provinceOptions.map((province) => (
@@ -259,7 +259,7 @@ export default function NewModerator() {
                                                     id="district"
                                                     value={district}
                                                 >
-                                                    <option value="" disabled>
+                                                    <option value="0" disabled>
                                                         --select--
                                                     </option>
                                                     {districtOptions.map((district) => (

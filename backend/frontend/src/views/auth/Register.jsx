@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 import "../../assets/css/auth/Register.css";
+import { Link } from "react-router-dom";
 
 export default function Register() {
     const [formData, setFormData] = useState({});
@@ -42,7 +43,7 @@ export default function Register() {
             displayErrorAlert("Password is required.");
         } else {
             try {
-                const response = await axios.post("/api/register", formData);
+                const response = await axios.post("http://localhost:8000/api/register", formData);
                 if (response) {
                     Swal.fire({
                         icon: 'success',
@@ -51,7 +52,7 @@ export default function Register() {
                         showConfirmButton: true,
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '/login';
+                            window.location.href = '/student';
                         }
                     });
                 }
@@ -103,13 +104,13 @@ export default function Register() {
                             <div className="row justify-content-center">
                                 <div className="col-lg-6 col-md-8 d-flex flex-column align-items-center justify-content-center">
                                     <div className="d-flex justify-content-center py-4">
-                                        <a
-                                            href="/"
+                                        <Link
+                                            to="/"
                                             className="logo d-flex align-items-center w-auto"
                                         >
                                             <img src="assets/img/logo.png" alt="" />
                                             <span className="d-none d-lg-block">NIE RADIO</span>
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="card lgn_crd_bg_lgt mb-3">
                                         <div className="card-body">
@@ -169,7 +170,7 @@ export default function Register() {
                                                             Grade <span className="text-danger">*</span>
                                                         </label>
                                                         <select onChange={handleChange} className="form-select" aria-label="Default select example" name="student_grade" id="student_grade">
-                                                            <option selected disabled>--select--</option>
+                                                            <option value="0" selected disabled>--select--</option>
                                                             <option value="1">1</option>
                                                             <option value="2">2</option>
                                                             <option value="3">3</option>
@@ -248,7 +249,7 @@ export default function Register() {
                                                     <div className="col-12">
                                                         <p className="small mb-0">
                                                             Already have an account?{" "}
-                                                            <a href="/login">Log in</a>
+                                                            <Link to="/login">Log in</Link>
                                                         </p>
                                                     </div>
                                                 </form>

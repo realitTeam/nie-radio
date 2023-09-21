@@ -21,6 +21,7 @@ export default function Home() {
           <div className="row">
             <div className="col-md-6">
               <RadioPlayer />
+
               {/* <div className="row">
                 <div className="col-4">
                   <div className="card">

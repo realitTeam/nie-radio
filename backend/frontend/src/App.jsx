@@ -20,6 +20,12 @@ import NewModerator from "./views/admin/moderators/NewModerator";
 import ANewStudent from "./views/admin/students/NewStudent";
 import ANewRecording from "./views/admin/recordings/NewRecording";
 import MAllStudents from "./views/moderator/students/AllStudents";
+import About from "./views/welcome/About";
+import Contact from "./views/welcome/Contact";
+import Blog from "./views/welcome/Blog";
+import Radio3D from "./views/welcome/Radio3D";
+import Messenger from "./views/welcome/Messenger";
+import Programs from "./views/welcome/Programs";
 
 function AuthenticatedRoute({ element, token, allowedRoles }) {
   const storedToken = localStorage.getItem("token");
@@ -62,6 +68,12 @@ function App() {
         <Routes>
           {/* web routes */}
           <Route path="/" exact element={<Welcome />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/3d-radio" element={<Radio3D />} />
+          <Route path="/messenger" element={<Messenger />} />
+          <Route path="/programs" element={<Programs />} />
           {/* auth routes */}
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register />} />

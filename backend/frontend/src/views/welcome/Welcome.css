@@ -1,5 +1,7 @@
 /* Hero section container */
 @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+
 
 .radio-box{
   margin-top: -138px;
@@ -21,7 +23,7 @@
 .hero-content .welcome {
   font-family: luckiest guy;
   color: #fff;
-  font-size: 80px;
+  font-size: 90px;
 }
 
 .hero-content .to {
@@ -33,7 +35,7 @@
 .hero-content .nie-radio {
   font-family: luckiest guy;
   color: #c9b0ea;
-  font-size: 80px;
+  font-size: 90px;
 }
 /* Button style */
 .btn-readmore {
@@ -64,4 +66,93 @@
   .hero-image {
     padding: 10px;
   }
+  .footer_style{
+    padding-top: 200px;
+  }
+  /* .ftr_lbls{
+    padding-top: 20px;
+  } */
+}
+
+@media (max-width: 530px) {
+  .hero-content,
+  .hero-image {
+    padding: 10px;
+  }
+  .footer_style{
+    padding-top: 300px;
+  }
+  /* .ftr_lbls{
+    padding-top: 20px;
+  } */
+}
+
+/* text styles n colors------- -----------------------*/
+.section_title_dark{
+  font-size: 40px;
+  font-weight: 900;
+  color: #6f4772;
+  text-align: center;
+}
+.section_body_dark{
+  font-size: 18px;
+  font-weight: 400;
+  color: #6f4772;
+}
+.section_title_light{
+  font-size: 40px;
+  font-weight: 900;
+  color: #fef1ff;
+  text-align: center;
+}
+.section_body_light{
+  font-size: 15px;
+  font-weight: 400;
+  color: #fef1ff;
+}
+.top_section{
+  margin-top: 34px;
+}
+
+/* background colors -----------------------*/
+.bg_white{
+  background-color: #fff;
+}
+.bg_purple_light{
+  background-color: #efe3ff;
+}
+.bg_purple_dark{
+  background-color: #8563B9;
+}
+
+/* sub pages styles ------------------------*/
+.sub_top-hero-content {
+  padding: 20px;
+  color: #fff;
+}
+
+.sub_top-hero-content .txt1 {
+  font-family: Outfit;
+  font-weight: 900;
+  color: #fff;
+  font-size: 50px;
+}
+
+.sub_top-hero-content .txt3 {
+    font-family: Outfit;
+    font-weight: 900;
+    color: #ffd699;
+    font-size: 20px;
+  }
+
+.sub_top-hero-content .txt2 {
+  font-family: Outfit;
+  font-weight: 900;
+  color: #e7d5ff;
+  font-size: 40px;
+}
+
+/* Image on the right */
+.hero-image {
+  padding: 20px;
 }

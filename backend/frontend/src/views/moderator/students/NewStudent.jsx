@@ -14,7 +14,7 @@ export default function NewStudent() {
     const tokenPayload = jwtDecode(token);
     const username = tokenPayload.username;
     useEffect(() => {
-        axios.get(`/api/moderator/reff/${username}`)
+        axios.get(`http://localhost:8000/api/moderator/reff/${username}`)
             .then(response => {
                 setReffData(response.data);
             })
@@ -54,7 +54,7 @@ export default function NewStudent() {
             displayErrorAlert("Invalid Phone format.");
         } else {
             try {
-                const response = await axios.post("/api/moderator/students/store", formData);
+                const response = await axios.post("http://localhost:8000/api/moderator/students/store", formData);
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -176,7 +176,7 @@ export default function NewStudent() {
                                                 Grade <span className="text-danger">*</span>
                                             </label>
                                             <select onChange={handleChange} className="form-select" aria-label="Default select example" name="student_grade" id="student_grade">
-                                                <option disabled selected>--select--</option>
+                                                <option value="0" disabled selected>--select--</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>

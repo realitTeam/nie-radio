@@ -42,7 +42,7 @@ export default function ANewStudent() {
             displayErrorAlert("Invalid Phone format.");
         } else {
             try {
-                const response = await axios.post("/api/admin/students/store",formData);
+                const response = await axios.post("http://localhost:8000/api/admin/students/store",formData);
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
@@ -163,7 +163,7 @@ export default function ANewStudent() {
                                                 Grade <span className="text-danger">*</span>
                                             </label>
                                             <select onChange={handleChange} className="form-select" aria-label="Default select example" name="student_grade" id="student_grade">
-                                                <option disabled selected>--select--</option>
+                                                <option value="0" disabled selected>--select--</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>

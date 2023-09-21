@@ -1,32 +1,33 @@
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
 const Footer = () => {
     return (
         <>
-            <footer class="text-center bg-pi-li text-lg-start text-muted">
-                <section class="bg-pi-dk d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+            <footer class="text-center bg-pi-li text-lg-start text-muted footer_style">
+                <section class="bg-pi-dk d-flex justify-content-center justify-content-lg-between p-4 border-bottom ftr_lbls">
                     <div class="me-5 d-none d-lg-block">
                         <span></span>
                     </div>
                     <div>
-                        <a href="" class="me-4 text-reset">
+                        <Link to="/" class="me-4 text-reset">
                             <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="" class="me-4 text-reset">
+                        </Link>
+                        <Link to="/" class="me-4 text-reset">
                             <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="" class="me-4 text-reset">
+                        </Link>
+                        <Link to="/" class="me-4 text-reset">
                             <i class="fab fa-google"></i>
-                        </a>
-                        <a href="" class="me-4 text-reset">
+                        </Link>
+                        <Link to="/" class="me-4 text-reset">
                             <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="" class="me-4 text-reset">
+                        </Link>
+                        <Link to="/" class="me-4 text-reset">
                             <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="" class="me-4 text-reset">
+                        </Link>
+                        {/* <Link to="/" class="me-4 text-reset">
                             <i class="fab fa-github"></i>
-                        </a>
+                        </Link> */}
                     </div>
                 </section>
                 <section class="">
@@ -41,7 +42,7 @@ const Footer = () => {
                                     elit.
                                 </p>
                             </div>
-                            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            {/* <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                                 <h6 class="text-uppercase fw-bold mb-4">Products</h6>
                                 <p>
                                     <a href="#!" class="text-reset">
@@ -91,30 +92,30 @@ const Footer = () => {
                                         Contact Us
                                     </a>
                                 </p>
-                            </div>
+                            </div> */}
                             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
                                 <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
                                 <p>
-                                    <i class="fas fa-home me-3"></i> New York, NY 10012, US
+                                    <i class="fas fa-home me-3"></i> P.O. Box 21, High Level Rd, Maharagama, Sri Lanka
                                 </p>
                                 <p>
                                     <i class="fas fa-envelope me-3"></i>
-                                    info@example.com
+                                    info@nie.edu.lk
                                 </p>
                                 <p>
-                                    <i class="fas fa-phone me-3"></i> + 01 234 567 88
-                                </p>
-                                <p>
-                                    <i class="fas fa-print me-3"></i> + 01 234 567 89
+                                    <i class="fas fa-phone me-3"></i> +94 117 601 601
                                 </p>
                             </div>
                         </div>
                     </div>
                 </section>
                 <div class="text-center p-4">
-                    Copyright © 2023 - National Institute of Education - 
+                    Copyright © 2023 - National Institute of Education -
+                    <a class="text-reset fw-bold" href="#">
+                        Designed and Implemented by Yuwan Audio Visuals
+                    </a>
                     <a class="text-reset fw-bold" href="https://realit.lk">
-                         Concept, Design & Developed By Real IT PVT LTD
+                        - Developed By Real IT PVT LTD
                     </a>
                 </div>
             </footer>

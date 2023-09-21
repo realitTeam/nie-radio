@@ -1,0 +1,122 @@
+/* ChatIcon.css */
+
+/* Styling for the chat icon button */
+.chat-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.chat-btn {
+    background-color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.chat-btn img {
+    width: 50px;
+    height: 50px;
+}
+
+/* Styling for the chat popup */
+.popup {
+    position: fixed;
+    bottom: 20px; /* Adjust the distance from the bottom */
+    right: 20px; /* Adjust the distance from the right */
+    background-color: #fff; /* Change to your desired background color */
+    border: 1px solid #ccc; /* Add a border if desired */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 2%;
+    padding: 20px;
+    max-width: 400px;
+    height: 400px;
+    width: 100%;
+    z-index: 10000;
+}
+
+.popup-content {
+    text-align: center; /* Center the content */
+}
+
+.popup h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.popup p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* Example form styling */
+.popup form {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup label {
+    font-weight: bold;
+}
+
+.popup textarea {
+    height: 100px;
+    resize: none;
+    margin: 10px 0;
+}
+
+.popup button {
+    background-color: #007bff; /* Change to your desired button color */
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Close button styling */
+.popup button:last-child {
+    background-color: #ccc; /* Change to your desired button color */
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* Close button hover effect */
+.popup button:last-child:hover {
+    background-color: #999; /* Change to your desired hover color */
+}
+
+/* Input field styling */
+.chat-input {
+    display: flex;
+    align-items: center;
+    margin-top: 20px; /* Add spacing between previous content and input */
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+/* Send button styling */
+.chat-input button[type="submit"] {
+    background-color: #007bff; /* Change to your desired button color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+/* Send button hover effect */
+.chat-input button[type="submit"]:hover {
+    background-color: #0056b3; /* Change to your desired hover color */
+}

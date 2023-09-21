@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useState } from "react";
 import Swal from 'sweetalert2';
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const Login = ({ onLogin }) => {
     const [formData, setFormData] = useState({});
@@ -21,7 +21,7 @@ const Login = ({ onLogin }) => {
             return;
         };
         try {
-            const response = await axios.post("/api/login", formData);
+            const response = await axios.post("http://localhost:8000/api/login", formData);
             const token = response.data.token;
             const role = response.data.role; // Get the role from the response
 
@@ -76,10 +76,10 @@ const Login = ({ onLogin }) => {
                             <div className="row justify-content-center">
                                 <div className="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                                     <div className="d-flex justify-content-center py-4">
-                                        <a href="/" className="logo d-flex align-items-center w-auto">
+                                        <Link to="/" className="logo d-flex align-items-center w-auto">
                                             <img src="assets/img/logo.png" alt="" />
                                             <span className="d-none d-lg-block">NIE RADIO</span>
-                                        </a>
+                                        </Link>
                                     </div>
                                     <div className="card lgn_crd_bg_lgt">
                                         <div className="card-body">
@@ -110,7 +110,7 @@ const Login = ({ onLogin }) => {
                                                     <button className="btn btn-primary w-100" type="submit">Login</button>
                                                 </div>
                                                 <div className="col-12">
-                                                    <p className="small mb-0">Don't have account? <a href="/register">Create an account</a></p>
+                                                    <p className="small mb-0">Don't have account? <Link to="/register">Create an account</Link></p>
                                                 </div>
                                             </form>
                                         </div>

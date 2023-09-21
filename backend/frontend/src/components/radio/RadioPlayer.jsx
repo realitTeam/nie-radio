@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import albumart from "./alar1.jpg"
 import "./style.css";
 
 const RadioPlayer = () => {
@@ -29,7 +30,7 @@ const RadioPlayer = () => {
     <>
       <div className="radio-section section mb-2 crd_bg_lgt">
         <div className="album-art">
-          <img src="../../../public/album_arts/alar1.jpg" alt="Album Art" />
+          <img src={albumart} alt="Album Art" />
         </div>
         <div className="audio-info">
           <div className="audio-title">Streaming Title</div>

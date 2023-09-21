@@ -1,0 +1,19 @@
+/* Contact.css */
+.contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    color: purple;
+  }
+  
+  .contact-link i {
+    font-size: 30px; /* Adjust the icon size as needed */
+  }
+  
+  .contact-link p {
+    font-size: 18px; /* Adjust the text size as needed */
+    margin-top: 10px;
+    font-weight: 500;
+  }

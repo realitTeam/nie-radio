@@ -11,7 +11,7 @@ import Footer from "../../../components/moderator/layouts/Footer";
 //   const toggleStudentStatus = async () => {
 //     try {
 //       const student_email = selectedStudent.student_email;
-//       await axios.put(`/api/moderator/students/status/${student_email}`);
+//       await axios.put(`http://localhost:8000/api/moderator/students/status/${student_email}`);
 //       // Update the moderator status in the selectedStudent object
 //       selectedStudent.student_status = selectedStudent.student_status === "active" ? "inactive" : "active";
 //       // Close the modal after toggling
@@ -85,7 +85,7 @@ export default function MAllStudents() {
 
   useEffect(() => {
     async function fetchStudents() {
-      const studentsData = await axios.get(`/api/moderator/students/${username}`);
+      const studentsData = await axios.get(`http://localhost:8000/api/moderator/students/${username}`);
       setStudents(studentsData.data);
     }
     fetchStudents();

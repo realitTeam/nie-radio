@@ -1,34 +1,30 @@
-// AllModerators.jsx
+
 import React, { useState, useEffect } from "react";
 import axios from 'axios'
-
 import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
 
-function ModeratorModal({ selectedModerator, onClose }) {
+function ModeratorModal({ selectedModerator, onClose, updateModeratorList }) {
   const toggleModeratorStatus = async () => {
-    
     try {
-      // Call an API to toggle the status
       const moderator_email = selectedModerator.organization_email;
-      await axios.put(`/api/admin/moderators/status/${moderator_email}`);
-      // Update the moderator status in the selectedModerator object
+      await axios.put(`http://localhost:8000/api/admin/moderators/status/${moderator_email}`);
       selectedModerator.moderator_status = selectedModerator.moderator_status === "active" ? "inactive" : "active";
-      // Close the modal after toggling
-      onClose();
+      // Call the function to update the moderator list
+      updateModeratorList();
     } catch (error) {
       console.error("Error toggling moderator status", error);
     }
   };
 
   return (
-    <div className="modal">
+    <div className="modal fade" id="moderatorInfoModal" tabIndex="-1" aria-labelledby="moderatorInfoModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-lg modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title">{selectedModerator.organization_name}</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            {/* <button type="button" className="btn-close" onClick={onClose}></button> */}
           </div>
           <div className="modal-body">
             <div className="row">
@@ -75,12 +71,12 @@ function ModeratorModal({ selectedModerator, onClose }) {
             </div>
           </div>
           <div className="modal-footer">
-            <button onClick={toggleModeratorStatus} className="btn btn-sm btn-info">
+            <button onClick={toggleModeratorStatus} className="btn btn-sm btn-primary">
               {selectedModerator.moderator_status === "active" ? "Inactive" : "Active"}
             </button>
-            <button onClick={onClose} className="btn btn-sm btn-danger">
+            {/* <button onClick={onClose} className="btn btn-sm btn-danger">
               Close
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -88,21 +84,26 @@ function ModeratorModal({ selectedModerator, onClose }) {
   );
 }
 
-
 export default function AllModerators() {
   const [moderators, setModerators] = useState([]);
   const [selectedModerator, setSelectedModerator] = useState(null);
+
+  const updateModeratorList = async () => {
+    try {
+      const moderatorsData = await axios.get('http://localhost:8000/api/admin/moderators');
+      setModerators(moderatorsData.data);
+    } catch (error) {
+      console.error("Error fetching moderators", error);
+    }
+  };
 
   const handleViewModerator = (moderator) => {
     setSelectedModerator(moderator);
   };
 
   useEffect(() => {
-    async function fetchModerators() {
-      const moderatorsData = await axios.get('/api/admin/moderators');
-      setModerators(moderatorsData.data);
-    }
-    fetchModerators();
+    // Fetch the initial list of moderators
+    updateModeratorList();
   }, []);
 
   return (
@@ -158,8 +159,9 @@ export default function AllModerators() {
                           <td className="align-middle">
                             <button
                               className="btn btn-sm btn-primary"
-                              onClick={() => handleViewModerator(moderator)}
-                            >
+                              data-bs-toggle="modal"
+                              data-bs-target="#moderatorInfoModal"
+                              onClick={() => handleViewModerator(moderator)}>
                               View
                             </button>
                           </td>
@@ -175,12 +177,8 @@ export default function AllModerators() {
       </main>
 
       {selectedModerator && (
-        <ModeratorModal
-          selectedModerator={selectedModerator}
-          onClose={() => setSelectedModerator(null)}
-        />
+        <ModeratorModal selectedModerator={selectedModerator} onClose={() => setSelectedModerator(null)} updateModeratorList={updateModeratorList} />
       )}
-
     </>
   );
 }

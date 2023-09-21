@@ -43,7 +43,7 @@ export default function ANewRecording() {
         }
 
         try {
-            const response = await axios.post("/api/admin/recordings/store", formData);
+            const response = await axios.post("http://localhost:8000/api/admin/recordings/store", formData);
             if (response && response.status === 201) {
                 Swal.fire({
                     icon: 'success',
@@ -141,7 +141,7 @@ export default function ANewRecording() {
                                                 Grade
                                             </label>
                                             <select onChange={handleChange} className="form-select" aria-label="Default select example" name="session_grade" id="session_grade">
-                                                <option disabled selected>--select--</option>
+                                                <option value="0" disabled selected>--select--</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
