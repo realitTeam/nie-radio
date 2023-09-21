@@ -21,7 +21,7 @@ const Login = ({ onLogin }) => {
             return;
         };
         try {
-            const response = await axios.post("http://localhost:8000/api/login", formData);
+            const response = await axios.post("/api/login", formData);
             const token = response.data.token;
             const role = response.data.role; // Get the role from the response
 

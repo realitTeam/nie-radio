@@ -43,7 +43,7 @@ export default function Register() {
             displayErrorAlert("Password is required.");
         } else {
             try {
-                const response = await axios.post("http://localhost:8000/api/register", formData);
+                const response = await axios.post("/api/register", formData);
                 if (response) {
                     Swal.fire({
                         icon: 'success',

@@ -27,7 +27,7 @@ const AChat = () => {
 
   const fetchUpdatedTickets = async () => {
     try {
-      const ticketsData = await axios.get(`http://localhost:8000/api/admin/tickets`);
+      const ticketsData = await axios.get(`/api/admin/tickets`);
       setTickets(ticketsData.data);
     } catch (error) {
       console.error("Error fetching updated tickets", error);
@@ -36,7 +36,7 @@ const AChat = () => {
 
   useEffect(() => {
     async function fetchTickets() {
-      const ticketsData = await axios.get(`http://localhost:8000/api/admin/tickets`);
+      const ticketsData = await axios.get(`/api/admin/tickets`);
       setTickets(ticketsData.data);
     }
     fetchTickets();
@@ -56,7 +56,7 @@ const AChat = () => {
   const handleReplySubmit = async (e) => {
     e.preventDefault(); 
     try {
-      const response = await axios.post(`http://localhost:8000/api/admin/tickets/reply`, formData);
+      const response = await axios.post(`/api/admin/tickets/reply`, formData);
       setFormData({});
       fetchUpdatedTickets();
       // Close the modal

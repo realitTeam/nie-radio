@@ -42,7 +42,7 @@ export default function ANewStudent() {
             displayErrorAlert("Invalid Phone format.");
         } else {
             try {
-                const response = await axios.post("http://localhost:8000/api/admin/students/store",formData);
+                const response = await axios.post("/api/admin/students/store",formData);
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',

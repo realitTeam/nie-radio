@@ -15,7 +15,7 @@ export default function ProfileDropdown() {
 
     useEffect(() => {
         // Make an API call to get user data based on the user ID
-        axios.get(`http://localhost:8000/api/user/${username}/details`)
+        axios.get(`/api/user/${username}/details`)
             .then(response => {
                 setUserData(response.data);
             })

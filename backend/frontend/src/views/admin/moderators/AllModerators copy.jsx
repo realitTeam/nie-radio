@@ -10,7 +10,7 @@ function ModeratorModal({ selectedModerator, onClose }) {
   const toggleModeratorStatus = async () => {
     try {
       const moderator_email = selectedModerator.organization_email;
-      await axios.put(`http://localhost:8000/api/admin/moderators/status/${moderator_email}`);
+      await axios.put(`/api/admin/moderators/status/${moderator_email}`);
       selectedModerator.moderator_status = selectedModerator.moderator_status === "active" ? "inactive" : "active";
     } catch (error) {
       console.error("Error toggling moderator status", error);
@@ -93,7 +93,7 @@ export default function AllModerators() {
 
   useEffect(() => {
     async function fetchModerators() {
-      const moderatorsData = await axios.get('http://localhost:8000/api/admin/moderators');
+      const moderatorsData = await axios.get('/api/admin/moderators');
       setModerators(moderatorsData.data);
     }
     fetchModerators();
@@ -189,7 +189,7 @@ function ModeratorModal({ selectedModerator, onClose, updateModeratorList }) {
   const toggleModeratorStatus = async () => {
     try {
       const moderator_email = selectedModerator.organization_email;
-      await axios.put(`http://localhost:8000/api/admin/moderators/status/${moderator_email}`);
+      await axios.put(`/api/admin/moderators/status/${moderator_email}`);
       selectedModerator.moderator_status = selectedModerator.moderator_status === "active" ? "inactive" : "active";
       // Call the function to update the moderator list
       updateModeratorList();
@@ -270,7 +270,7 @@ export default function AllModerators() {
 
   const updateModeratorList = async () => {
     try {
-      const moderatorsData = await axios.get('http://localhost:8000/api/admin/moderators');
+      const moderatorsData = await axios.get('/api/admin/moderators');
       setModerators(moderatorsData.data);
     } catch (error) {
       console.error("Error fetching moderators", error);

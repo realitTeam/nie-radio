@@ -43,7 +43,7 @@ export default function ANewRecording() {
         }
 
         try {
-            const response = await axios.post("http://localhost:8000/api/admin/recordings/store", formData);
+            const response = await axios.post("/api/admin/recordings/store", formData);
             if (response && response.status === 201) {
                 Swal.fire({
                     icon: 'success',

@@ -72,7 +72,7 @@ export default function NewModerator() {
         }else{
             try {
                 const response = await axios.post(
-                    "http://localhost:8000/api/admin/moderators/store",
+                    "/api/admin/moderators/store",
                     formData
                 );
                 if (response && response.status === 201) {

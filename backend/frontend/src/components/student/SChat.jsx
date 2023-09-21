@@ -31,7 +31,7 @@ const StudentChat = () => {
 
     useEffect(() => {
         async function fetchTickets() {
-            const ticketsData = await axios.get(`http://localhost:8000/api/student/tickets/${username}`);
+            const ticketsData = await axios.get(`/api/student/tickets/${username}`);
             setTickets(ticketsData.data);
 
             // Scroll to the bottom of the list when tickets are updated
@@ -47,10 +47,10 @@ const StudentChat = () => {
     const handleChatForm = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:8000/api/student/ticket/store", formData);
+            const response = await axios.post("/api/student/ticket/store", formData);
             if (response && response.data.message) {
                 // After successfully sending the message, fetch the updated ticket list
-                const updatedTicketsData = await axios.get(`http://localhost:8000/api/student/tickets/${username}`);
+                const updatedTicketsData = await axios.get(`/api/student/tickets/${username}`);
                 setTickets(updatedTicketsData.data);
 
                 // Reset the form to clear the ticket_content input field

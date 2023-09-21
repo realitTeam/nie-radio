@@ -10,7 +10,7 @@ export default function AllRecordings() {
 
     useEffect(() => {
         async function fetchRecordings() {
-            const recordingsData = await axios.get('http://localhost:8000/api/admin/recordings');
+            const recordingsData = await axios.get('/api/admin/recordings');
             setRecording(recordingsData.data);
         }
         fetchRecordings();

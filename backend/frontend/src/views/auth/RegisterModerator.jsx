@@ -66,7 +66,7 @@ export default function RegisterModerator() {
     } else {
       try {
         const response = await axios.post(
-          "http://localhost:8000/api/m",
+          "/api/m",
           formData
         );
         if (response) {

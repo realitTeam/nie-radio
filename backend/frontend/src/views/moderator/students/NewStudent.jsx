@@ -14,7 +14,7 @@ export default function NewStudent() {
     const tokenPayload = jwtDecode(token);
     const username = tokenPayload.username;
     useEffect(() => {
-        axios.get(`http://localhost:8000/api/moderator/reff/${username}`)
+        axios.get(`/api/moderator/reff/${username}`)
             .then(response => {
                 setReffData(response.data);
             })
@@ -54,7 +54,7 @@ export default function NewStudent() {
             displayErrorAlert("Invalid Phone format.");
         } else {
             try {
-                const response = await axios.post("http://localhost:8000/api/moderator/students/store", formData);
+                const response = await axios.post("/api/moderator/students/store", formData);
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
