@@ -1,5 +1,8 @@
 // adminController.js
 require("dotenv").config();
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
@@ -11,6 +14,8 @@ const Student = require("../../models/users/StudentModel");
 const Login = require("../../models/login/LoginModel");
 const Recording = require("../../models/recording/RecordingModel");
 const Chat = require("../../models/chat/ChatModel");
+const Playlist = require("../../models/playlist/PlaylistModel");
+const Blog = require("../../models/blog/BlogModel");
 
 //-------------------------------------------------------------------------------------------------------
 const aViewModerators = asyncHandler(async (req, res) => {
@@ -137,25 +142,25 @@ const aStoreStudent = asyncHandler(async (req, res) => {
     student_phone
   } = req.body;
   const password = '76543210'
- // validating inputs
- if (!student_email) {
-  return res.status(400).json({ message: "All fields are required." });
-}
-// validating refferal code
-const ref_code = await Moderator.findOne({ refferal_code }).lean().exec();
-if (!ref_code) {
-  return res.status(401).json({ message: "Invalid Reference ID." });
-}
-// checking existing users
-const duplicate_email = await Student.findOne({ student_email }).lean().exec();
-if (duplicate_email) {
-  return res.status(409).json({message: "Student already exist."});
-}
-const moderator_id = ref_code._id;
+  // validating inputs
+  if (!student_email) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+  // validating refferal code
+  const ref_code = await Moderator.findOne({ refferal_code }).lean().exec();
+  if (!ref_code) {
+    return res.status(401).json({ message: "Invalid Reference ID." });
+  }
+  // checking existing users
+  const duplicate_email = await Student.findOne({ student_email }).lean().exec();
+  if (duplicate_email) {
+    return res.status(409).json({ message: "Student already exist." });
+  }
+  const moderator_id = ref_code._id;
   const hashedPW = await bcrypt.hash(password, 10);
   const student_status = "active";
   const studentObject = {
-    moderator:moderator_id,
+    moderator: moderator_id,
     refferal_code,
     student_name,
     student_id,
@@ -185,11 +190,15 @@ const moderator_id = ref_code._id;
 const aStoreRecording = asyncHandler(async (req, res) => {
   const {
     session_name,
+    streaming_date,
+    streaming_time,
     session_description,
     session_link,
     session_grade,
     session_subject
   } = req.body;
+
+  console.log(req.body);
 
   if (!session_name) {
     return res.json({ message: "Fill all required fields." });
@@ -203,6 +212,8 @@ const aStoreRecording = asyncHandler(async (req, res) => {
   }
   const recordingObject = {
     session_name,
+    streaming_date,
+    streaming_time,
     session_description,
     session_link,
     session_grade,
@@ -253,6 +264,98 @@ const aTicketReply = asyncHandler(async (req, res) => {
 });
 
 //-------------------------------------------------------------------------------------------------------
+const blogUploadFolder = './blog_images';
+if (!fs.existsSync(blogUploadFolder)) {
+  fs.mkdirSync(blogUploadFolder);
+}
+const blog_storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'blog_images/');
+  },
+  filename: (req, file, cb) => {
+    const blog_post_timestamp = Date.now();
+    const blog_post_extension = path.extname(file.originalname);
+    const blog_post_newFilename = `${blog_post_timestamp}${blog_post_extension}`;
+    cb(null, blog_post_newFilename);
+  }
+});
+const blog_upload = multer({ storage: blog_storage });
+const aStoreBlogPost = asyncHandler(async (req, res) => {
+  blog_upload.single('file')(req, res, async function (err) {
+    const { post_title, post_description } = req.body;
+    if (err) {
+      return res.status(400).json({ message: 'File upload failed.' });
+    }
+    if (!req.file) {
+      res.status(400).json({ message: 'No blog image file uploaded.' });
+      return;
+    }
+    if (!['.jpeg', '.jpg', '.png'].includes(path.extname(req.file.originalname))) {
+      res.status(400).json({ message: 'Invalid image format.' });
+      return;
+    }
+    const image_newFilename = req.file.filename;
+    const blogObject = {
+      post_title,
+      post_description,
+      post_img: image_newFilename,
+    };
+    const blog_post = await Blog.create(blogObject);
+    if (blog_post) {
+      res.status(201).json({ message: 'Blog post successfully stored' });
+    } else {
+      res.status(400).json({ message: 'Error occurred' });
+    }
+  });
+});
+
+//-------------------------------------------------------------------------------------------------------
+const playlistUploadFolder = './playlist';
+if (!fs.existsSync(playlistUploadFolder)) {
+  fs.mkdirSync(playlistUploadFolder);
+}
+const audio_storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'playlist/');
+  },
+  filename: (req, file, cb) => {
+    const audio_timestamp = Date.now();
+    const audio_extension = path.extname(file.originalname);
+    const audio_newFilename = `${audio_timestamp}${audio_extension}`;
+    cb(null, audio_newFilename);
+  }
+});
+const audio_upload = multer({ storage: audio_storage });
+const aStorePlaylistAudio = asyncHandler(async (req, res) => {
+  audio_upload.single('file')(req, res, async function (err) {
+    const { audio_name } = req.body;
+    if (err) {
+      return res.status(400).json({ message: 'File upload failed.' });
+    }
+    if (!req.file) {
+      res.status(400).json({ message: 'No audio file uploaded.' });
+      return;
+    }
+    if (!['.mp3', '.wav', '.mp4', '.mkv'].includes(path.extname(req.file.originalname))) {
+      res.status(400).json({ message: 'Invalid audio file format.' });
+      return;
+    }
+    const audio_newFilename = req.file.filename;
+    const audioObject = {
+      audio_name,
+      audio_file: audio_newFilename,
+    };
+    const playlist = await Playlist.create(audioObject);
+    if (playlist) {
+      res.status(201).json({ message: 'Session successfully stored' });
+    } else {
+      res.status(400).json({ message: 'Error occurred' });
+    }
+  });
+});
+
+
+//-------------------------------------------------------------------------------------------------------
 module.exports = {
   aViewModerators,
   aViewStudents,
@@ -262,5 +365,7 @@ module.exports = {
   aStoreStudent,
   aStoreRecording,
   aListTickets,
-  aTicketReply
+  aTicketReply,
+  aStoreBlogPost,
+  aStorePlaylistAudio,
 };

@@ -6,6 +6,14 @@ const RecordingSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        streaming_date: {
+            type: Date,
+            required: true
+        },
+        streaming_time: {
+            type: String,
+            required: true
+        },
         session_description: {
             type: String,
             required: false

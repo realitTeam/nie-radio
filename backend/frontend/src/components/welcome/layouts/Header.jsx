@@ -28,11 +28,11 @@ const Header = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto align-items-center">
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link mx-2" to="/messenger">
                   Messenger
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link className="nav-link mx-2" to="/programs">
                   Programs

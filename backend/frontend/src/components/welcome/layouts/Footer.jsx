@@ -27,7 +27,7 @@ const Footer = () => {
                         </Link>
                         {/* <Link to="/" class="me-4 text-reset">
                             <i class="fab fa-github"></i>
-                        </Link> */}
+                        </Link>  */}
                     </div>
                 </section>
                 <section class="">

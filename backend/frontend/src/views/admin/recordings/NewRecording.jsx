@@ -37,11 +37,6 @@ export default function ANewRecording() {
             return;
         }
 
-        if (formData.session_description.length > 150) {
-            displayErrorAlert('Description must not exceed 150 characters.');
-            return;
-        }
-
         try {
             const response = await axios.post("/api/admin/recordings/store", formData);
             if (response && response.status === 201) {
@@ -109,7 +104,7 @@ export default function ANewRecording() {
                             <div className="card mb-3 crd_bg_lgt">
                                 <div className="card-body">
                                     <form onSubmit={handleFormSubmit} method="POST" className="row g-3 mt-3" name="studentForm" id="studentForm">
-                                        <div className="col-12 mb-2">
+                                        <div className="col-6 mb-2">
                                             <label htmlFor="session_name" className="form-label">
                                                 Session Name <span className="text-danger">*</span>
                                             </label>
@@ -120,7 +115,34 @@ export default function ANewRecording() {
                                                     name="session_name"
                                                     className="form-control"
                                                     id="session_name"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-3 mb-2">
+                                            <label htmlFor="streaming_date" className="form-label">
+                                                Streaming Date <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="input-group has-validation">
 
+                                                <input onChange={handleChange}
+                                                    type="date"
+                                                    name="streaming_date"
+                                                    className="form-control"
+                                                    id="streaming_date"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-3 mb-2">
+                                            <label htmlFor="streaming_time" className="form-label">
+                                                Streaming Time <span className="text-danger">*</span>
+                                            </label>
+                                            <div className="input-group has-validation">
+
+                                                <input onChange={handleChange}
+                                                    type="time"
+                                                    name="streaming_time"
+                                                    className="form-control"
+                                                    id="streaming_time"
                                                 />
                                             </div>
                                         </div>
@@ -141,7 +163,7 @@ export default function ANewRecording() {
                                                 Grade
                                             </label>
                                             <select onChange={handleChange} className="form-select" aria-label="Default select example" name="session_grade" id="session_grade">
-                                                <option value="0" disabled selected>--select--</option>
+                                                <option defaultValue="0" disabled selected>--select--</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>

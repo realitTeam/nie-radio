@@ -1,6 +1,8 @@
+// AChat.jsx
 import React, { useState, useEffect, useRef } from "react";
-import axios from 'axios';
+import axios from "axios";
 import jwtDecode from "jwt-decode";
+import io from "socket.io-client";
 
 import "./achat.css"
 
@@ -9,6 +11,7 @@ const AChat = () => {
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [formData, setFormData] = useState({});
   const tableContainerRef = useRef(null);
+  const [socket, setSocket] = useState(null);
 
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -42,6 +45,25 @@ const AChat = () => {
     fetchTickets();
   }, []);
 
+  useEffect(() => {
+    const newSocket = io(`/api/`);
+    console.log(newSocket);
+    var socket_connect = newSocket.on("connect", () => {
+      console.log("Connected to WebSocket");
+    });
+    console.log(socket_connect);
+    var socket_msg = newSocket.on("message", (message) => {
+      // Handle incoming messages
+      fetchUpdatedTickets(); // Update chat list when a new message arrives
+    });
+    console.log(socket_msg);
+    setSocket(newSocket);
+    console.log(socket);
+    return () => {
+      newSocket.disconnect(); // Clean up WebSocket connection on unmount
+    };
+  }, []);
+
   // Scroll to the bottom when tickets change
   useEffect(() => {
     if (tableContainerRef.current) {
@@ -54,14 +76,14 @@ const AChat = () => {
   };
 
   const handleReplySubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     try {
       const response = await axios.post(`/api/admin/tickets/reply`, formData);
       setFormData({});
-      fetchUpdatedTickets();
-      // Close the modal
-    const modal_rply = new bootstrap.Modal(document.getElementById("replyChatModal"));
-    modal_rply.close();
+      // Send the message via WebSocket
+      if (socket) {
+        socket.emit("message", "New message"); // Replace with the actual message content
+      }
     } catch (error) {
       console.error("Error posting reply", error);
     }
@@ -70,10 +92,10 @@ const AChat = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      ticket_id : selectedTicket._id,
-      [e.target.id]: e.target.value
+      ticket_id: selectedTicket._id,
+      [e.target.id]: e.target.value,
     });
-  }
+  };
 
   return (
     <>
@@ -148,8 +170,8 @@ const AChat = () => {
                       {/* <span
                         className="input-group-text"
                         id="inputGroupPrepend"> */}
-                          {/* <a href="tel:+94773728798"> +94 77 372 8798</a> */}
-                        {/* <button className="btn btn-sm btn-success">
+                      {/* <a href="tel:+94773728798"> +94 77 372 8798</a> */}
+                      {/* <button className="btn btn-sm btn-success">
                           <i className="bi bi-telephone-plus-fill"></i>
                         </button>
                       </span> */}

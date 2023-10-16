@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function SideBar() {
     return (
@@ -6,49 +7,69 @@ export default function SideBar() {
             <aside id="sidebar" className="sidebar">
                 <ul className="sidebar-nav" id="sidebar-nav">
                     <li className="nav-item">
-                        <a className="nav-link" href="/admin">
+                        <Link className="nav-link" to="/admin">
                             <i className="bi bi-house-fill"></i>
                             <span>Home</span>
-                        </a>
+                        </Link>
                     </li>
-                    <li className="nav-heading">Recordings</li>
+                    <li className="nav-heading">Previous Recordings</li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/admin/recordings/new">
-                        <i className="bi bi-cassette-fill"></i>
+                        <Link className="nav-link" to="/admin/recordings/new">
+                            <i className="bi bi-cassette-fill"></i>
                             <span>New Session</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/admin/recordings">
-                        <i className="bi bi-cassette-fill"></i>
+                        <Link className="nav-link" to="/admin/recordings">
+                            <i className="bi bi-cassette-fill"></i>
                             <span>Recordings</span>
-                        </a>
+                        </Link>
                     </li>
+                    <li className="nav-heading">Playlist</li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/admin/playlist/new">
+                            <i className="bi bi-cassette-fill"></i>
+                            <span>New Audio</span>
+                        </Link>
+                    </li>
+                    <li className="nav-heading">Blogs</li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/admin/blogs/new">
+                            <i className="bi bi-person-fill-add"></i>
+                            <span>New Post</span>
+                        </Link>
+                    </li>
+                    {/* <li className="nav-item">
+                        <Link className="nav-link" to="/admin/blogs">
+                            <i className="bi bi-people-fill"></i>
+                            <span>Posts</span>
+                        </Link>
+                    </li> */}
                     <li className="nav-heading">Moderators</li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/admin/moderators/new">
-                        <i className="bi bi-person-fill-add"></i>
+                        <Link className="nav-link" to="/admin/moderators/new">
+                            <i className="bi bi-person-fill-add"></i>
                             <span>New Moderator</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/admin/moderators">
-                        <i className="bi bi-people-fill"></i>
+                        <Link className="nav-link" to="/admin/moderators">
+                            <i className="bi bi-people-fill"></i>
                             <span>Moderators</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-heading">Students</li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/admin/students/new">
-                        <i className="bi bi-person-fill-add"></i>
+                        <Link className="nav-link" to="/admin/students/new">
+                            <i className="bi bi-person-fill-add"></i>
                             <span>New Student</span>
-                        </a>
+                        </Link>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/admin/students">
-                        <i className="bi bi-people-fill"></i>
+                        <Link className="nav-link" to="/admin/students">
+                            <i className="bi bi-people-fill"></i>
                             <span>Students</span>
-                        </a>
+                        </Link>
                     </li>
                 </ul>
             </aside>

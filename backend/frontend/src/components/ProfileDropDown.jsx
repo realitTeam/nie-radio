@@ -37,7 +37,7 @@ export default function ProfileDropdown() {
     const handleSignOut = () => {
         // Remove the token from local storage
         localStorage.removeItem("token");
-        window.location.href('/login')
+        window.location.href = '/login';
     };
 
     return (

@@ -1,9 +1,8 @@
 /* Hero section container */
 @import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Outfit&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit&display=swap");
 
-
-.radio-box{
+.radio-box {
   margin-top: -138px;
   margin-left: 120px;
 }
@@ -27,15 +26,22 @@
 }
 
 .hero-content .to {
-    font-family: luckiest guy;
-    color: #ffd699;
-    font-size: 50px;
-  }
+  font-family: luckiest guy;
+  color: #ffd699;
+  font-size: 50px;
+}
 
 .hero-content .nie-radio {
   font-family: luckiest guy;
-  color: #c9b0ea;
+  color: #bc0b34;
   font-size: 90px;
+  text-transform: capitalize;
+}
+.hero-content .by {
+  font-family: luckiest guy;
+  color: #e81748;
+  font-size: 50px;
+  text-transform: capitalize;
 }
 /* Button style */
 .btn-readmore {
@@ -66,7 +72,7 @@
   .hero-image {
     padding: 10px;
   }
-  .footer_style{
+  .footer_style {
     padding-top: 200px;
   }
   /* .ftr_lbls{
@@ -79,7 +85,7 @@
   .hero-image {
     padding: 10px;
   }
-  .footer_style{
+  .footer_style {
     padding-top: 300px;
   }
   /* .ftr_lbls{
@@ -88,41 +94,41 @@
 }
 
 /* text styles n colors------- -----------------------*/
-.section_title_dark{
+.section_title_dark {
   font-size: 40px;
   font-weight: 900;
   color: #6f4772;
   text-align: center;
 }
-.section_body_dark{
+.section_body_dark {
   font-size: 18px;
   font-weight: 400;
   color: #6f4772;
 }
-.section_title_light{
+.section_title_light {
   font-size: 40px;
   font-weight: 900;
   color: #fef1ff;
   text-align: center;
 }
-.section_body_light{
+.section_body_light {
   font-size: 15px;
   font-weight: 400;
   color: #fef1ff;
 }
-.top_section{
+.top_section {
   margin-top: 34px;
 }
 
 /* background colors -----------------------*/
-.bg_white{
+.bg_white {
   background-color: #fff;
 }
-.bg_purple_light{
+.bg_purple_light {
   background-color: #efe3ff;
 }
-.bg_purple_dark{
-  background-color: #8563B9;
+.bg_purple_dark {
+  background-color: #8563b9;
 }
 
 /* sub pages styles ------------------------*/
@@ -139,11 +145,11 @@
 }
 
 .sub_top-hero-content .txt3 {
-    font-family: Outfit;
-    font-weight: 900;
-    color: #ffd699;
-    font-size: 20px;
-  }
+  font-family: Outfit;
+  font-weight: 900;
+  color: #ffd699;
+  font-size: 20px;
+}
 
 .sub_top-hero-content .txt2 {
   font-family: Outfit;

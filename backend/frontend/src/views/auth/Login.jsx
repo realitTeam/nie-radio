@@ -4,6 +4,8 @@ import { useState } from "react";
 import Swal from 'sweetalert2';
 import { Link, Navigate } from "react-router-dom";
 
+import "../../assets/css/auth/Register.css";
+
 const Login = ({ onLogin }) => {
     const [formData, setFormData] = useState({});
 

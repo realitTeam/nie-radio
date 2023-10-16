@@ -148,7 +148,6 @@ const studentRegister = asyncHandler(async (req, res) => {
 
   // Store JWT in local storage
   // localStorage.setItem("token", accessToken);
-
   if (student) {
     res.status(201).json({ accessToken, role: role, message: `You are successfully registered` });
   } else {

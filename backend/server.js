@@ -1,15 +1,18 @@
 // server.js
 require('dotenv').config();
-
 const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/dbConnection');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 // routes /////////////////////////////////////////////////////////////////////////////
+const welcomeRoutes = require('./routes/welcome/welcomeRoutes');
 const authRoutes = require('./routes/auth/authRoutes');
-const adminROutes = require('./routes/admin/adminRoutes');
+const adminRoutes = require('./routes/admin/adminRoutes');
 const moderatorRoutes = require('./routes/moderator/moderatorRoutes');
 const studentRoutes = require('./routes/student/studentRoutes');
 const protectedRoutes = require('./routes/protected/protectedRoutes');
@@ -21,17 +24,42 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 connectDB();
 
+const server = http.createServer(app);
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // Set up CORS options
 const corsOptions = {
-  origin: 'http://nieappworld.com', // Allow requests only from this domain
+  origin: ['http://nieappworld.com', 'http://localhost:3000'], // Allow requests from these domains
   methods: 'GET, POST, PUT, DELETE', // Specify the allowed HTTP methods
   optionsSuccessStatus: 200, // Set the status code for successful preflight requests
 };
 
+const io = socketIo(server, {
+  cors: corsOptions, // Apply CORS configuration to Socket.IO
+});
+
 app.use(cors(corsOptions));
 app.use('/', express.static(path.join(__dirname, 'public')));
+
+io.on("connection", (socket) => {
+  socket.connect();
+  console.log(`A user connected via WebSocket with ID: ${socket.id}`);
+  // Listen for a "message" event from clients
+  // socket.on("message", (message) => {
+  //   // Broadcast the message to all connected clients, including the sender
+  //   io.emit("message", message);
+  // });
+
+  socket.on("disconnect", () => {
+    console.log(`A user disconnected from ${socket.id}.`);
+  });
+  socket.on("error", (error) => {
+    console.error(`WebSocket Error: ${error.message}`);
+  });
+});
+
+
 
 function checkRole(role) {
   return (req, res, next) => {
@@ -50,6 +78,7 @@ function checkRole(role) {
   };
 }
 
+app.use('/api', welcomeRoutes);
 app.use('/api', authRoutes); //login + register
 // app.use('/api', listenRoutes);
 app.use('/api/admin',  adminROutes); //checkRole("admin"),

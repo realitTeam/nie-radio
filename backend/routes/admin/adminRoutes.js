@@ -15,5 +15,7 @@ router.get('/recordings', asyncHandler(recordingController.rAllRecordings))
 router.post('/recordings/store', asyncHandler(adminController.aStoreRecording))
 router.get('/tickets', asyncHandler(adminController.aListTickets))
 router.post('/tickets/reply', asyncHandler(adminController.aTicketReply))
+router.post('/blogs/store', asyncHandler(adminController.aStoreBlogPost))
+router.post('/playlist/store', asyncHandler(adminController.aStorePlaylistAudio))
 
 module.exports = router;

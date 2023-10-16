@@ -8,7 +8,7 @@
 
 body {
   font-family: "Open Sans", sans-serif;
-  background: #D1EAFF;
+  background: #d2bbec;
   color: #d4bcbc;
 }
 
@@ -79,13 +79,13 @@ h6 {
 
 .back-to-top i {
   font-size: 24px;
-  color: #BFD7FF ;
+  color: #00c8cf ;
   line-height: 0;
 }
 
 .back-to-top:hover {
   background: #6776f4;
-  color: #BFD7FF ;
+  color: #00c8cf ;
 }
 
 .back-to-top.active {
@@ -144,7 +144,7 @@ h6 {
 }
 
 .dropdown-menu .dropdown-item:hover {
-  background-color: #D1EAFF;
+  background-color: #d2bbec;
 }
 
 @media (min-width: 768px) {
@@ -152,7 +152,7 @@ h6 {
     content: "";
     width: 13px;
     height: 13px;
-    background: #BFD7FF ;
+    background: #00c8cf ;
     position: absolute;
     top: -7px;
     right: 20px;
@@ -191,7 +191,7 @@ h6 {
 }
 /* card custom styling -------------*/
 .crd_bg_lgt{
-  background-color: #E2FDFF;
+  background-color: #f0e5fc;
   color: #4C5CE8;
   font-weight: 600;
 }
@@ -200,7 +200,7 @@ h6 {
 }
 /* card custom styling ---------------*/
 .lgn_crd_bg_lgt{
-  background-color: #E2FDFF;
+  background-color: #f0e5fc;
   color: #4C5CE8;
   font-weight: 600;
 }
@@ -212,13 +212,18 @@ h6 {
 }
 /* chat card custom styling -----------*/
 .chat_crd_bg_lgt{
-  background-color: #eafeff;
+  background-color: #f0e5fc;
   color: #4C5CE8;
   font-weight: 600;
 }
+.crd_bg_lgt_{
+  font-weight: 600;
+  background-color: #f0e5fc;
+  color: #4C5CE8;
+}
 /* modal custom styling -----------------*/
 .modal_crd_bg_lgt{
-  background-color: #E2FDFF;
+  background-color: #f0e5fc;
   color: #4C5CE8;
   font-weight: 600;
 }
@@ -244,8 +249,8 @@ h6 {
 }
 
 .bg-warning-light {
-  background-color: #BFD7FF 3cd;
-  border-color: #BFD7FF 3cd;
+  background-color: #00c8cf 3cd;
+  border-color: #00c8cf 3cd;
 }
 
 .bg-info-light {
@@ -269,7 +274,7 @@ h6 {
 .card-header,
 .card-footer {
   border-color: #ebeef4;
-  background-color: #BFD7FF ;
+  background-color: #00c8cf ;
   color: #798eb3;
   padding: 15px;
 }
@@ -325,7 +330,7 @@ h6 {
 
 .accordion-button:not(.collapsed) {
   color: #4C5CE8 ;
-  background-color: #D1EAFF;
+  background-color: #d2bbec;
 }
 
 .accordion-flush .accordion-button {
@@ -388,7 +393,7 @@ h6 {
 }
 
 .nav-tabs-bordered .nav-link.active {
-  background-color: #BFD7FF ;
+  background-color: #00c8cf ;
   color: #4C5CE8 ;
   border-bottom: 2px solid #4C5CE8 ;
 }
@@ -423,7 +428,7 @@ h6 {
   z-index: 997;
   height: 60px;
   box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
-  background-color: #BFD7FF ;
+  background-color: #00c8cf ;
   padding-left: 20px;
   /* Toggle Sidebar Button */
   /* Search Bar */
@@ -565,7 +570,7 @@ h6 {
 }
 
 .header-nav .notifications .notification-item:hover {
-  background-color: #D1EAFF;
+  background-color: #d2bbec;
 }
 
 .header-nav .messages {
@@ -600,7 +605,7 @@ h6 {
 }
 
 .header-nav .messages .message-item:hover {
-  background-color: #D1EAFF;
+  background-color: #d2bbec;
 }
 
 .header-nav .profile {
@@ -633,7 +638,7 @@ h6 {
 }
 
 .header-nav .profile .dropdown-item:hover {
-  background-color: #D1EAFF;
+  background-color: #d2bbec;
 }
 
 /*--------------------------------------------------------------
@@ -652,7 +657,7 @@ h6 {
   scrollbar-width: thin;
   scrollbar-color: #aab7cf transparent;
   box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
-  background-color: #BFD7FF ;
+  background-color: #00c8cf ;
 }
 
 @media (max-width: 1199px) {
@@ -664,7 +669,7 @@ h6 {
 .sidebar::-webkit-scrollbar {
   width: 5px;
   height: 8px;
-  background-color: #BFD7FF ;
+  background-color: #00c8cf ;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
@@ -726,9 +731,9 @@ h6 {
   align-items: center;
   font-size: 15px;
   font-weight: 600;
-  color: #4C5CE8 ;
+  color: #0f1729 ;
   transition: 0.3;
-  background: #BFD7FF ;
+  background: #00c8cf ;
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -736,12 +741,12 @@ h6 {
 .sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
-  color: #4C5CE8 ;
+  color: #0f1729 ;
 }
 
 .sidebar-nav .nav-link.collapsed {
-  color: #4C5CE8 ;
-  background: #BFD7FF ;
+  color: #0f1729 ;
+  background: #00c8cf ;
 }
 
 .sidebar-nav .nav-link.collapsed i {
@@ -749,12 +754,12 @@ h6 {
 }
 
 .sidebar-nav .nav-link:hover {
-  color: #4C5CE8 ;
-  background: #D1EAFF;
+  color: #0f1729 ;
+  background: #00d4e8;
 }
 
 .sidebar-nav .nav-link:hover i {
-  color: #4C5CE8 ;
+  color: #0f1729 ;
 }
 
 .sidebar-nav .nav-link .bi-chevron-down {
@@ -777,7 +782,7 @@ h6 {
   align-items: center;
   font-size: 14px;
   font-weight: 600;
-  color: #4C5CE8 ;
+  color: #0f1729 ;
   transition: 0.3;
   padding: 10px 0 10px 40px;
   transition: 0.3s;
@@ -792,11 +797,11 @@ h6 {
 
 .sidebar-nav .nav-content a:hover,
 .sidebar-nav .nav-content a.active {
-  color: #4C5CE8 ;
+  color: #0f1729 ;
 }
 
 .sidebar-nav .nav-content a.active i {
-  background-color: #4C5CE8 ;
+  background-color: #0f1729 ;
 }
 
 /*--------------------------------------------------------------
@@ -907,7 +912,7 @@ h6 {
   line-height: 0;
   border-radius: 50%;
   flex-shrink: 0;
-  border: 3px solid #BFD7FF ;
+  border: 3px solid #00c8cf ;
   flex-grow: 0;
 }
 
@@ -1012,7 +1017,7 @@ h6 {
 }
 
 .iconslist .icon {
-  background-color: #BFD7FF ;
+  background-color: #00c8cf ;
   border-radius: 0.25rem;
   text-align: center;
   color: #4C5CE8 ;
@@ -1132,7 +1137,7 @@ h6 {
 
 .contact .php-email-form .error-message {
   display: none;
-  color: #BFD7FF ;
+  color: #00c8cf ;
   background: #ed3c0d;
   text-align: left;
   padding: 15px;
@@ -1142,7 +1147,7 @@ h6 {
 
 .contact .php-email-form .sent-message {
   display: none;
-  color: #BFD7FF ;
+  color: #00c8cf ;
   background: #18d26e;
   text-align: center;
   padding: 15px;
@@ -1152,7 +1157,7 @@ h6 {
 
 .contact .php-email-form .loading {
   display: none;
-  background: #BFD7FF ;
+  background: #00c8cf ;
   text-align: center;
   padding: 15px;
   margin-bottom: 24px;
@@ -1196,7 +1201,7 @@ h6 {
   background: #4C5CE8 ;
   border: 0;
   padding: 10px 30px;
-  color: #BFD7FF ;
+  color: #00c8cf ;
   transition: 0.4s;
   border-radius: 4px;
 }
@@ -1249,7 +1254,7 @@ h6 {
 
 .error-404 .btn {
   background: #51678f;
-  color: #BFD7FF ;
+  color: #00c8cf ;
   padding: 8px 30px;
 }
 
@@ -1270,7 +1275,7 @@ h6 {
   padding: 20px 0;
   font-size: 14px;
   transition: all 0.3s;
-  border-top: 1px solid #BFD7FF ;
+  border-top: 1px solid #00c8cf ;
 }
 
 .footer .copyright {

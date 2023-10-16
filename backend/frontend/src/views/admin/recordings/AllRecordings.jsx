@@ -69,7 +69,7 @@ export default function AllRecordings() {
                                                             </a>
                                                         </td>
                                                     </tr>
-                                                ))}
+                                                ))};
                                         </tbody>
                                     </table>
                                 </div>

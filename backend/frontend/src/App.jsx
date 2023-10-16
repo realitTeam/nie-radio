@@ -26,6 +26,9 @@ import Blog from "./views/welcome/Blog";
 import Radio3D from "./views/welcome/Radio3D";
 import Messenger from "./views/welcome/Messenger";
 import Programs from "./views/welcome/Programs";
+import ANewAudio from "./views/admin/playlist/NewAudio";
+import ANewBlog from "./views/admin/blog/NewBlog";
+import AllBlogs from "./views/admin/blog/AllBlogs";
 
 function AuthenticatedRoute({ element, token, allowedRoles }) {
   const storedToken = localStorage.getItem("token");
@@ -93,6 +96,9 @@ function App() {
           <Route path="/admin/students/new" element={<AuthenticatedRoute token={token} allowedRoles={["admin"]} element={<ANewStudent />} />} />
           <Route path="/admin/recordings" element={<AuthenticatedRoute token={token} allowedRoles={["admin"]} element={<AllRecordings />} />} />
           <Route path="/admin/recordings/new" element={<AuthenticatedRoute token={token} allowedRoles={["admin"]} element={<ANewRecording />} />} />
+          <Route path="/admin/playlist/new" element={<AuthenticatedRoute token={token} allowedRoles={["admin"]} element={<ANewAudio />} />} />
+          <Route path="/admin/blogs/new" element={<AuthenticatedRoute token={token} allowedRoles={["admin"]} element={<ANewBlog />} />} />
+          <Route path="/admin/blogs" element={<AuthenticatedRoute token={token} allowedRoles={["admin"]} element={<AllBlogs />} />} />
         </Routes>
       </Router>
     </div>

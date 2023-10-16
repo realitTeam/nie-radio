@@ -19,8 +19,8 @@ const Welcome = () => {
             <div className="col-md-6">
               <div className="hero-content mt-5">
                 <h1 className="welcome">WELCOME</h1>
-                <h1 className="nie-radio"><span className="to">TO </span> NIE RADIO</h1>
-                <p>Welcome to NIE RADIO</p>
+                <h1 className="nie-radio"><span className="to">TO </span> AlphaU <span className="by">by NIE</span></h1>
+                {/* <p>AlphaU by NIE</p> */}
                 <Link to="/about" className="btn-readmore">Read More</Link>
               </div>
             </div>

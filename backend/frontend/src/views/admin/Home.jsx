@@ -8,6 +8,7 @@ import Footer from "../../components/admin/layouts/Footer";
 import './admin.css';
 import RadioPlayer from '../../components/radio/RadioPlayer';
 import AChat from '../../components/admin/AChat';
+import AListnerCount from '../../components/admin/listner_count/ListnerCount';
 
 export default function Home() {
 
@@ -21,7 +22,7 @@ export default function Home() {
           <div className="row">
             <div className="col-md-6">
               <RadioPlayer />
-
+              <AListnerCount />
               {/* <div className="row">
                 <div className="col-4">
                   <div className="card">
