@@ -14,6 +14,7 @@ export default function ANewBlog() {
     const [file, setFile] = useState([]);
     const [title, setTitle] = useState([]);
     const [description, setDescription] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const displayErrorAlert = (message) => {
         Swal.fire({
@@ -26,7 +27,6 @@ export default function ANewBlog() {
     // Function to handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-
         // Validation checks
         if (!file || !title || !description) {
             displayErrorAlert('All fields are required.');
@@ -37,7 +37,7 @@ export default function ANewBlog() {
         dataObj.append('post_title', title);
         dataObj.append('post_description', description);
         dataObj.append('file', file);
-
+        setIsLoading(true);
         try {
             const response = await axios.post("/api/admin/blogs/store", dataObj);
             if (response && response.status === 201) {
@@ -73,6 +73,8 @@ export default function ANewBlog() {
                     text: 'An error occurred while submitting. Please try again later.',
                 });
             }
+        }finally {
+            setIsLoading(false);
         }
     };
 
@@ -125,7 +127,6 @@ export default function ANewBlog() {
                                                 Post Title <span className="text-danger">*</span>
                                             </label>
                                             <div className="input-group has-validation">
-
                                                 <input onChange={(e) => setTitle(e.target.value)}
                                                     type="text"
                                                     name="title"
@@ -144,6 +145,13 @@ export default function ANewBlog() {
                                                 className="form-control"
                                                 id="description" rows={2}></textarea>
                                         </div>
+                                        {isLoading && ( // Display loading spinner if isLoading is true
+                                            <div className="text-center mt-5">
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden"></span>
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="col-12">
                                             <label htmlFor="file" className="form-label">
                                                 Post Image <span className="text-danger">*</span>
@@ -157,8 +165,8 @@ export default function ANewBlog() {
                                             />
                                         </div>
                                         <div className="col-12">
-                                            <button className="btn btn-primary" type="submit">
-                                                Submit
+                                            <button className="btn btn-primary" type="submit" disabled={isLoading}>
+                                            {isLoading ? "Uploading..." : "Submit"}
                                             </button>
                                         </div>
                                     </form>

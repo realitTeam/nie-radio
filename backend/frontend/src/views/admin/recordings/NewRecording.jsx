@@ -1,16 +1,21 @@
 // ANewRecording.jsx
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-
 import Swal from 'sweetalert2';
-
 
 import Header from "../../../components/admin/layouts/Header";
 import SideBar from "../../../components/admin/layouts/SideBar";
 import Footer from "../../../components/admin/layouts/Footer";
 
 export default function ANewRecording() {
-    const [formData, setFormData] = useState({});
+    const [sessionName, setSessionName] = useState('');
+    const [streamingDate, setStreamingDate] = useState('');
+    const [streamingTime, setStreamingTime] = useState('');
+    const [subject, setSubject] = useState('');
+    const [grade, setGrade] = useState('');
+    const [language, setLanguage] = useState('');
+    const [file, setFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const displayErrorAlert = (message) => {
         Swal.fire({
@@ -24,31 +29,44 @@ export default function ANewRecording() {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
 
+        const formData = new FormData();
+        formData.append('session_name', sessionName);
+        formData.append('streaming_date', streamingDate);
+        formData.append('streaming_time', streamingTime);
+        formData.append('session_subject', subject);
+        formData.append('session_grade', grade);
+        formData.append('session_language', language);
+        formData.append('file', file);
         // Validation checks
-        if (!formData.session_name || !formData.session_link) {
-            displayErrorAlert('Session Name and Session Link are required.');
+        if (!sessionName) {
+            displayErrorAlert('Session Name is required.');
             return;
         }
-
-        // URL validation (you can use a regex pattern)
-        const urlPattern = /^https?:\/\/.+/;
-        if (!urlPattern.test(formData.session_link)) {
-            displayErrorAlert('Session Link must be a valid URL.');
+        if (!streamingDate) {
+            displayErrorAlert('Streaming Date is required.');
             return;
         }
-
+        if (!streamingTime) {
+            displayErrorAlert('Streaming Time is required.');
+            return;
+        }
+        if (!file) {
+            displayErrorAlert('Recording File is required.');
+            return;
+        }
+        setIsLoading(true);
         try {
             const response = await axios.post("/api/admin/recordings/store", formData);
             if (response && response.status === 201) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
-                    text: 'Recording successfully submitted.',
+                    text: 'Recording successfully uploaded.',
                     timer: 2500, // Display for 3 seconds
                     showConfirmButton: false, // Hide the "OK" button
-                  }).then(() => {
+                }).then(() => {
                     window.location.reload();
-                  });
+                });
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -58,7 +76,7 @@ export default function ANewRecording() {
                     title: 'Validation Error',
                     text: 'Please check input values and try again.',
                 });
-            }else if (error.response && error.response.status === 409){
+            } else if (error.response && error.response.status === 409) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
@@ -72,15 +90,17 @@ export default function ANewRecording() {
                     text: 'An error occurred while submitting. Please try again later.',
                 });
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.id]: e.target.value,
-        });
-    }
+    // const handleChange = (e) => {
+    //     setFormData({
+    //         ...formData,
+    //         [e.target.id]: e.target.value,
+    //     });
+    // }
 
     return (
         <>
@@ -94,7 +114,7 @@ export default function ANewRecording() {
                             <li className="breadcrumb-item">
                                 <a href="/">Home</a>
                             </li>
-                            <li className="breadcrumb-item active">New Session</li>
+                            <li className="breadcrumb-item active">Recordings</li>
                         </ol>
                     </nav>
                 </div>
@@ -110,7 +130,7 @@ export default function ANewRecording() {
                                             </label>
                                             <div className="input-group has-validation">
 
-                                                <input onChange={handleChange}
+                                                <input onChange={(e) => setSessionName(e.target.value)}
                                                     type="text"
                                                     name="session_name"
                                                     className="form-control"
@@ -124,7 +144,7 @@ export default function ANewRecording() {
                                             </label>
                                             <div className="input-group has-validation">
 
-                                                <input onChange={handleChange}
+                                                <input onChange={(e) => setStreamingDate(e.target.value)}
                                                     type="date"
                                                     name="streaming_date"
                                                     className="form-control"
@@ -138,7 +158,7 @@ export default function ANewRecording() {
                                             </label>
                                             <div className="input-group has-validation">
 
-                                                <input onChange={handleChange}
+                                                <input onChange={(e) => setStreamingTime(e.target.value)}
                                                     type="time"
                                                     name="streaming_time"
                                                     className="form-control"
@@ -150,7 +170,7 @@ export default function ANewRecording() {
                                             <label htmlFor="session_subject" className="form-label">
                                                 Subject
                                             </label>
-                                            <input onChange={handleChange}
+                                            <input onChange={(e) => setSubject(e.target.value)}
                                                 type="text"
                                                 name="session_subject"
                                                 className="form-control"
@@ -162,7 +182,7 @@ export default function ANewRecording() {
                                             <label htmlFor="session_grade" className="form-label">
                                                 Grade
                                             </label>
-                                            <select onChange={handleChange} className="form-select" aria-label="Default select example" name="session_grade" id="session_grade">
+                                            <select onChange={(e) => setGrade(e.target.value)} className="form-select" aria-label="Default select example" name="session_grade" id="session_grade">
                                                 <option defaultValue="0" disabled selected>--select--</option>
                                                 <option value="1">1</option>
                                                 <option value="2">2</option>
@@ -183,39 +203,35 @@ export default function ANewRecording() {
                                             <label htmlFor="session_language" className="form-label">
                                                 Language
                                             </label>
-                                            <input onChange={handleChange}
-                                                type="text"
-                                                name="session_language"
+                                            <select onChange={(e) => setLanguage(e.target.value)} className="form-select" aria-label="Default select example" name="session_language" id="session_language">
+                                                <option defaultValue="0" disabled selected>--select--</option>
+                                                <option value="Sinhala">Sinhala</option>
+                                                <option value="English">English</option>
+                                                <option value="Tamil">Tamil</option>
+                                            </select>
+                                        </div>
+                                        {isLoading && ( // Display loading spinner if isLoading is true
+                                            <div className="text-center mt-5">
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden"></span>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <div className="col-12">
+                                            <label htmlFor="file" className="form-label">
+                                                Recording File <span className="text-danger">*</span>
+                                            </label>
+                                            <input onChange={(e) => setFile(e.target.files[0])}
+                                                type="file"
+                                                name="file"
                                                 className="form-control"
-                                                id="session_language"
-
+                                                id="file"
+                                                accept=".mp3"
                                             />
                                         </div>
                                         <div className="col-12">
-                                            <label htmlFor="session_link" className="form-label">
-                                                Session Link <span className="text-danger">*</span>
-                                            </label>
-                                            <input onChange={handleChange}
-                                                type="text"
-                                                name="session_link"
-                                                className="form-control"
-                                                id="session_link"
-
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <label htmlFor="session_description" className="form-label">
-                                                Description
-                                            </label>
-                                            <textarea onChange={handleChange}
-                                                type="text"
-                                                name="session_description"
-                                                className="form-control"
-                                                id="session_description" rows={2}></textarea>
-                                        </div>
-                                        <div className="col-12">
-                                            <button className="btn btn-primary" type="submit">
-                                                Submit
+                                            <button className="btn btn-primary" type="submit" disabled={isLoading}>
+                                                {isLoading ? "Uploading..." : "Submit"}
                                             </button>
                                         </div>
                                     </form>

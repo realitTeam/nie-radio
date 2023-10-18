@@ -187,44 +187,58 @@ const aStoreStudent = asyncHandler(async (req, res) => {
 });
 
 //-------------------------------------------------------------------------------------------------------
+const recordingUploadFolder = './recordings';
+if (!fs.existsSync(recordingUploadFolder)) {
+  fs.mkdirSync(recordingUploadFolder);
+}
+const recording_storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'recordings');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+  }
+});
+const recordings_upload = multer({ storage: recording_storage });
 const aStoreRecording = asyncHandler(async (req, res) => {
-  const {
-    session_name,
-    streaming_date,
-    streaming_time,
-    session_description,
-    session_link,
-    session_grade,
-    session_subject
-  } = req.body;
+  recordings_upload.single('file')(req, res, async function (err) {
+    const {
+      session_name,
+      streaming_date,
+      streaming_time,
+      session_subject,
+      session_grade,
+      session_language
+    } = req.body;
 
-  console.log(req.body);
-
-  if (!session_name) {
-    return res.json({ message: "Fill all required fields." });
-  }
-  const duplicate_recording = await Recording.findOne({ session_link }).lean().exec();
-  console.log(duplicate_recording);
-  if (duplicate_recording) {
-    return res
-      .status(409)
-      .json({ message: "Session already exist." });
-  }
-  const recordingObject = {
-    session_name,
-    streaming_date,
-    streaming_time,
-    session_description,
-    session_link,
-    session_grade,
-    session_subject
-  };
-  const session_recording = await Recording.create(recordingObject);
-  if (session_recording) {
-    res.status(201).json({ message: `Session successfully stored` });
-  } else {
-    res.status(400).json({ message: `Error occurred` });
-  }
+    if (err) {
+      return res.status(400).json({ message: 'File upload failed.' });
+    }
+    if (!req.file) {
+      res.status(400).json({ message: 'No audio file uploaded.' });
+      return;
+    }
+    if (!['.mp3'].includes(path.extname(req.file.originalname))) {
+      res.status(400).json({ message: 'Invalid audio file format.' });
+      return;
+    }
+    // const recording_newFilename = req.file.filename;
+    const recordingObject = {
+      session_name,
+      streaming_date,
+      streaming_time,
+      session_subject,
+      session_grade,
+      session_language,
+      recording_file: req.file.filename,
+    };
+    const session_recording = await Recording.create(recordingObject);
+    if (session_recording) {
+      res.status(201).json({ message: `Recording successfully stored` });
+    } else {
+      res.status(400).json({ message: `Error occurred` });
+    }
+  });
 });
 
 //-------------------------------------------------------------------------------------------------------
@@ -273,10 +287,7 @@ const blog_storage = multer.diskStorage({
     cb(null, 'blog_images/');
   },
   filename: (req, file, cb) => {
-    const blog_post_timestamp = Date.now();
-    const blog_post_extension = path.extname(file.originalname);
-    const blog_post_newFilename = `${blog_post_timestamp}${blog_post_extension}`;
-    cb(null, blog_post_newFilename);
+    cb(null, "img" + "_" + Date.now() + path.extname(file.originalname));
   }
 });
 const blog_upload = multer({ storage: blog_storage });
@@ -298,7 +309,7 @@ const aStoreBlogPost = asyncHandler(async (req, res) => {
     const blogObject = {
       post_title,
       post_description,
-      post_img: image_newFilename,
+      post_img:  req.file.filename,
     };
     const blog_post = await Blog.create(blogObject);
     if (blog_post) {
@@ -319,11 +330,8 @@ const audio_storage = multer.diskStorage({
     cb(null, 'playlist/');
   },
   filename: (req, file, cb) => {
-    const audio_timestamp = Date.now();
-    const audio_extension = path.extname(file.originalname);
-    const audio_newFilename = `${audio_timestamp}${audio_extension}`;
-    cb(null, audio_newFilename);
-  }
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
+ }
 });
 const audio_upload = multer({ storage: audio_storage });
 const aStorePlaylistAudio = asyncHandler(async (req, res) => {
@@ -340,10 +348,9 @@ const aStorePlaylistAudio = asyncHandler(async (req, res) => {
       res.status(400).json({ message: 'Invalid audio file format.' });
       return;
     }
-    const audio_newFilename = req.file.filename;
     const audioObject = {
       audio_name,
-      audio_file: audio_newFilename,
+      audio_file:  req.file.filename,
     };
     const playlist = await Playlist.create(audioObject);
     if (playlist) {

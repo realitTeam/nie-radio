@@ -48,11 +48,11 @@ const Header = () => {
                   Blog
                 </Link>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link className="nav-link mx-2" to="/contact">
                   Contact Us
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
                 <Link className="nav-link mx-2" to="/about">
                   About Us

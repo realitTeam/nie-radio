@@ -6,5 +6,6 @@ const welcomeController = require('../../controllers/welcome/welcomeController')
 
 // Public routes
 router.get('/blogs', asyncHandler(welcomeController.wAllBlogPosts));
+router.get('/programs', asyncHandler(welcomeController.wAllPrograms));
 
 module.exports = router;

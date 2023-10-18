@@ -46,7 +46,7 @@ const AChat = () => {
   }, []);
 
   useEffect(() => {
-    const newSocket = io(`/api/`);
+    const newSocket = io(``);
     console.log(newSocket);
     var socket_connect = newSocket.on("connect", () => {
       console.log("Connected to WebSocket");

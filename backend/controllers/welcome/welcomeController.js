@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const Blog = require("../../models/blog/BlogModel");
+const Recording = require("../../models/recording/RecordingModel");
 
 //-------------------------------------------------------------------------------------------------------
 const wAllBlogPosts = asyncHandler(async (req, res) => {
@@ -18,6 +19,15 @@ const wAllBlogPosts = asyncHandler(async (req, res) => {
 });
 
 //-------------------------------------------------------------------------------------------------------
+const wAllPrograms = asyncHandler(async (req, res) => {
+    const programs = await Recording.find().lean();
+    if (!programs?.length) {
+        return res.status(400).json({ message: 'No program is found.' });
+    }
+    res.json(programs);
+});
+//-------------------------------------------------------------------------------------------------------
 module.exports = {
-    wAllBlogPosts
+    wAllBlogPosts,
+    wAllPrograms
 };

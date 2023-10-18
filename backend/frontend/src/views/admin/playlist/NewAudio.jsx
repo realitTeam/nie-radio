@@ -10,6 +10,7 @@ import Footer from "../../../components/admin/layouts/Footer";
 export default function ANewAudio() {
     const [audioName, setAudioName] = useState();
     const [file, setFile] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const displayErrorAlert = (message) => {
         Swal.fire({
@@ -22,7 +23,7 @@ export default function ANewAudio() {
     // Function to handle form submission
     const handleFormSubmit = async (e) => {
         e.preventDefault();
-
+        
         const formData = new FormData();
         formData.append('audio_name', audioName);
         formData.append('file', file);
@@ -32,7 +33,7 @@ export default function ANewAudio() {
             displayErrorAlert('All fields are required.');
             return;
         }
-
+        setIsLoading(true);
         try {
             const response = await axios.post("/api/admin/playlist/store", formData);
             if (response && response.status === 201) {
@@ -68,6 +69,8 @@ export default function ANewAudio() {
                     text: 'An error occurred while submitting. Please try again later.',
                 });
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -107,6 +110,13 @@ export default function ANewAudio() {
                                                 />
                                             </div>
                                         </div>
+                                        {isLoading && ( // Display loading spinner if isLoading is true
+                                            <div className="text-center mt-5">
+                                                <div className="spinner-border" role="status">
+                                                    <span className="visually-hidden"></span>
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="col-12 mb-2">
                                             <label htmlFor="file" className="form-label">
                                                 New Audio for Playlist <span className="text-danger">*</span>
@@ -123,8 +133,8 @@ export default function ANewAudio() {
                                             </div>
                                         </div>
                                         <div className="col-12">
-                                            <button className="btn btn-primary" type="submit">
-                                                Submit
+                                            <button className="btn btn-primary" type="submit" disabled={isLoading}>
+                                                {isLoading ? "Uploading..." : "Submit"}
                                             </button>
                                         </div>
                                     </form>

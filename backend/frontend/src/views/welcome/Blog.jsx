@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import Header from "../../components/welcome/layouts/Header";
 import Footer from "../../components/welcome/layouts/Footer";
 
-import "./home_blank.css";
+import "./home_blog.css";
 import blogImg from "./nie2.jpg";
-import { Link } from "react-router-dom";
-
 
 const Blog = () => {
   const [post, setPost] = useState([]);
@@ -19,6 +18,10 @@ const Blog = () => {
     }
     fetchPosts();
   }, []);
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   return (
     <>
@@ -31,16 +34,16 @@ const Blog = () => {
                 post && post.map((post) => (
                   <div className="col-4 crd" key={post.id}>
                     <div class="card" >
-                      <img src={blogImg} class="card-img-top" alt="..." />
+                      <img src={blogImg} class="card-img-top" alt={post.post_title} />
                       <div class="card-body">
-                        <h5 class="card-title">{post.post_title}</h5>
-                        <p class="card-text">{post.post_description}</p>
-                        <Link to="#" class=" btn-warning">Read More</Link>
+                      <h5 class="card-title blog_title">{post.post_title} <span>{formatDate(post.createdAt)}</span></h5>
+                        <p class="card-text blog_desc">{post.post_description}</p>
+                        {/* <Link to="#" class=" btn-warning">Read More</Link> */}
                       </div>
                     </div>
                   </div>
                 ))
-              };
+              }
             </div>
           </div>
         </div>

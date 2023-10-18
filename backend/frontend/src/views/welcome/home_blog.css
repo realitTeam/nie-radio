@@ -1,0 +1,24 @@
+.blank_bg{
+    background-color: #C9B0EA;
+    margin-top: 34px;
+}
+.container_blank{
+    background-color: #8563B9;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.blog_title{
+    font-size: 22px;
+    color: #8563B9;
+    font-weight: 700;
+}
+.blog_title span{
+    font-size: 16px;
+    color: #4a2f72;
+    font-weight: 400;
+}
+.blog_desc{
+    font-size: 18px;
+    font-weight: 400;
+    color: black;
+}

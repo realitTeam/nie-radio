@@ -14,25 +14,21 @@ const RecordingSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        session_description: {
+        session_subject: {
             type: String,
             required: false
-        },
-        session_link: {
-            type: String,
-            required: true
         },
         session_grade: {
-            type: String,
-            required: false
-        },
-        session_subject: {
             type: String,
             required: false
         },
         session_language: {
             type: String,
             required: false
+        },
+        recording_file: {
+            type: String,
+            required: true
         }
     },
     {

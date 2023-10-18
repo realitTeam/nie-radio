@@ -39,8 +39,11 @@ const io = socketIo(server, {
   cors: corsOptions, // Apply CORS configuration to Socket.IO
 });
 
-app.use(cors(corsOptions));
 app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/playlist', express.static(path.join(__dirname, '/playlist')));
+app.use('/blog_images', express.static(path.join(__dirname, '/blog_images')));
+app.use('/recordings', express.static(path.join(__dirname, '/recordings')));
+app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
 
 io.on("connection", (socket) => {
   socket.connect();
