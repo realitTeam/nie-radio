@@ -84,7 +84,7 @@ function checkRole(role) {
 app.use('/api', welcomeRoutes);
 app.use('/api', authRoutes); //login + register
 // app.use('/api', listenRoutes);
-app.use('/api/admin',  adminROutes); //checkRole("admin"),
+app.use('/api/admin',  adminRoutes); //checkRole("admin"),
 app.use('/api/moderator', moderatorRoutes);// checkRole("moderator"),
 app.use('/api/student', studentRoutes);// checkRole("student"),
 app.use('/api/user', protectedRoutes);
