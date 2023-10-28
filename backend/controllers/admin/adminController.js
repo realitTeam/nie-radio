@@ -323,53 +323,32 @@ const aStoreBlogPost = asyncHandler(async (req, res) => {
 
 //-------------------------------------------------------------------------------------------------------
 const playlistUploadFolder = './playlist';
-
-AWS.config.update({
-  accessKeyId: 'AKIAVDVSGZBJFK4OL5UH',
-  secretAccessKey: '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',
-});
-// ---------------------
-// if (!fs.existsSync(playlistUploadFolder)) {
-//   fs.mkdirSync(playlistUploadFolder);
-// }
-
-// const audio_storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'playlist/');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
-//   },
-// });
-// ---------------------
-// function generateFolderPath() {
-//   const now = new Date();
-//   const year = now.getFullYear();
-//   const month = now.getMonth() + 1; // Month is 0-indexed, so add 1
-//   const day = now.getDate();
-//   return `${year}/${month}/${day}`;
-// }
-// const audio_storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     // Generate a dynamic folder structure based on your requirements
-//     const folderPath = generateFolderPath(); // Implement a function to generate the path
-//     cb(null, path.join('playlist/', folderPath));
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
-//   },
-// });
-// --------------------
-// const audio_upload = multer({ storage: audio_storage });
+if (!fs.existsSync(playlistUploadFolder)) {
+  fs.mkdirSync(playlistUploadFolder);
+}
 
 const s3 = new AWS.S3();
 
-// Configure multer to use S3 as the storage
-const s3Storage = multer.memoryStorage();
-const s3Upload = multer({ storage: s3Storage });
+const audio_storage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    const s3Params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `${playlistUploadFolder}/${file.fieldname + "_" + Date.now() + path.extname(file.originalname)}`,
+    };
+
+    await s3.upload(s3Params).promise();
+
+    cb(null, '');
+  },
+  filename: (req, file, cb) => {
+    cb(null, '');
+  },
+});
+
+const audio_upload = multer({ storage: audio_storage });
 
 const aStorePlaylistAudio = asyncHandler(async (req, res) => {
-  s3Upload.array('files', 10)(req, res, async function (err) { // Set a limit on the number of files if needed
+  audio_upload.array('files', 10)(req, res, async function (err) { // Set a limit on the number of files if needed
     if (err) {
       return res.status(400).json({ message: 'File upload failed.' });
     }
@@ -381,25 +360,20 @@ const aStorePlaylistAudio = asyncHandler(async (req, res) => {
       return;
     }
 
-    for (const audioFile of audioFiles) {
-      if (!['.mp3'].includes(path.extname(audioFile.originalname))) {
-        res.status(400).json({ message: 'Invalid audio file format.' });
-        return;
-      }
-    }
-
     const playlistPromises = audioFiles.map(async (audioFile) => {
-      const audioObject = {
-        audio_file: audioFile.filename,
+      const s3Params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `${playlistUploadFolder}/${audioFile.fieldname + "_" + Date.now() + path.extname(audioFile.originalname)}`,
       };
 
-      const playlist = await Playlist.create(audioObject);
+      await s3.upload(s3Params).promise();
 
-      if (playlist) {
-        return { success: true, message: 'Audio file stored successfully' };
-      } else {
-        return { success: false, message: 'Error occurred while storing audio file' };
-      }
+      const s3ObjectURL = await s3.getSignedUrl('getObject', {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `${playlistUploadFolder}/${audioFile.fieldname + "_" + Date.now() + path.extname(audioFile.originalname)}`,
+      });
+
+      return { success: true, message: 'Audio file stored successfully', s3ObjectURL };
     });
 
     const results = await Promise.all(playlistPromises);
@@ -408,13 +382,12 @@ const aStorePlaylistAudio = asyncHandler(async (req, res) => {
     const errorCount = results.length - successCount;
 
     if (errorCount === 0) {
-      res.status(201).json({ message: `${successCount} audio files successfully stored` });
+      res.status(201).json({ message: `${successCount} audio files successfully stored`, s3ObjectURLs: results.map((result) => result.s3ObjectURL) });
     } else {
       res.status(400).json({ message: `${successCount} audio files stored, ${errorCount} errors occurred` });
     }
   });
 });
-
 
 //-------------------------------------------------------------------------------------------------------
 module.exports = {
