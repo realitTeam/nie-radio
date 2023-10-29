@@ -3,10 +3,6 @@ const mongoose = require('mongoose');
 
 const PlaylistSchema = new mongoose.Schema(
     {
-        audio_name: {
-            type: String,
-            required: false
-        },
         audio_file: {
             type: String,
             required: true

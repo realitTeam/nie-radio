@@ -323,25 +323,17 @@ const aStoreBlogPost = asyncHandler(async (req, res) => {
 
 //-------------------------------------------------------------------------------------------------------
 const playlistUploadFolder = './playlist';
+
 if (!fs.existsSync(playlistUploadFolder)) {
   fs.mkdirSync(playlistUploadFolder);
 }
 
-const s3 = new AWS.S3();
-
 const audio_storage = multer.diskStorage({
-  destination: async (req, file, cb) => {
-    const s3Params = {
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: `${playlistUploadFolder}/${file.fieldname + "_" + Date.now() + path.extname(file.originalname)}`,
-    };
-
-    await s3.upload(s3Params).promise();
-
-    cb(null, '');
+  destination: (req, file, cb) => {
+    cb(null, 'playlist/');
   },
   filename: (req, file, cb) => {
-    cb(null, '');
+    cb(null, file.fieldname + "_" + Date.now() + path.extname(file.originalname));
   },
 });
 
@@ -360,20 +352,25 @@ const aStorePlaylistAudio = asyncHandler(async (req, res) => {
       return;
     }
 
+    for (const audioFile of audioFiles) {
+      if (!['.mp3'].includes(path.extname(audioFile.originalname))) {
+        res.status(400).json({ message: 'Invalid audio file format.' });
+        return;
+      }
+    }
+
     const playlistPromises = audioFiles.map(async (audioFile) => {
-      const s3Params = {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: `${playlistUploadFolder}/${audioFile.fieldname + "_" + Date.now() + path.extname(audioFile.originalname)}`,
+      const audioObject = {
+        audio_file: audioFile.filename,
       };
 
-      await s3.upload(s3Params).promise();
+      const playlist = await Playlist.create(audioObject);
 
-      const s3ObjectURL = await s3.getSignedUrl('getObject', {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: `${playlistUploadFolder}/${audioFile.fieldname + "_" + Date.now() + path.extname(audioFile.originalname)}`,
-      });
-
-      return { success: true, message: 'Audio file stored successfully', s3ObjectURL };
+      if (playlist) {
+        return { success: true, message: 'Audio file stored successfully' };
+      } else {
+        return { success: false, message: 'Error occurred while storing audio file' };
+      }
     });
 
     const results = await Promise.all(playlistPromises);
@@ -382,12 +379,13 @@ const aStorePlaylistAudio = asyncHandler(async (req, res) => {
     const errorCount = results.length - successCount;
 
     if (errorCount === 0) {
-      res.status(201).json({ message: `${successCount} audio files successfully stored`, s3ObjectURLs: results.map((result) => result.s3ObjectURL) });
+      res.status(201).json({ message: `${successCount} audio files successfully stored` });
     } else {
       res.status(400).json({ message: `${successCount} audio files stored, ${errorCount} errors occurred` });
     }
   });
 });
+
 
 //-------------------------------------------------------------------------------------------------------
 module.exports = {
