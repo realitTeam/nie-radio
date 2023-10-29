@@ -19,7 +19,7 @@ const protectedRoutes = require('./routes/protected/protectedRoutes');
 // middleware /////////////////////////////////////////////////////////////////////////////
 const authMiddleware = require('./middleware/auth/authMiddleware');
 // /////////////////////////////////////////////////////////////////////////////
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 connectDB();
